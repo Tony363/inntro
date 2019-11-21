@@ -14,21 +14,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.contrib.auth import views as auth_views
-from events import views as user_views
-# from django.conf.urls import url,include
+from events import views 
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/',  user_views.register, name='register'),
-    path('', include('events.urls')),
+    path('register/', views.Signup, name='Signup'),
+    # path('', user_views.home, name='home')
+    # path('', include('events.urls')),
     # path('login/',auth_views.LoginView.as_view(template_name='events/login.html',name='login')),
     # path('logout/',auth_views.LoginView.as_view(template_name='events/logout.html',name='logout'))
  
-    # url(r'^$', user_views.home, name='home'),
+    url(r'^$', views.home, name='home'),
     # url(r'^signup/$', user_views.signup, name='signup'),
-    # url(r'^login/$', auth_views.LoginView.as_view(), {'template_name': 'login.html'}, name='login'),
-    # url(r'^logout/$', auth_views.LogoutView.as_view(), {'next_page': 'login'}, name='logout'),
+    url(r'^login/$', auth_views.LoginView.as_view(), {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/$', auth_views.LogoutView.as_view(), {'next_page': 'login'}, name='logout'),
     
 ]

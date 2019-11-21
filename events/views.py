@@ -18,9 +18,9 @@ from django.shortcuts import render,redirect
 
 # @login_required
 def home(request):
-    return render(request, 'admin/events/home.html')
+    return render(request, 'admin/events/home.html/')
 
-def register(request):
+def Signup(request):
     if request.method == 'GET':
         form = SignUpForm(request.GET)
         return render(request,'admin/events/signup.html',{'form':form})
@@ -30,10 +30,9 @@ def register(request):
        
         if form.is_valid():
             form.save()
-        return redirect('home')
-        # else:
-        #     return redirect('register')
-            # form = SignUpForm()
-        # return render(request,'admin/events/signup.html',{'form':form})
+        return render(request, 'admin/events/login.html')
+    else:
+        return redirect('Signup')
+
     
   
