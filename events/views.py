@@ -30,9 +30,11 @@ def Signup(request):
        
         if form.is_valid():
             form.save()
-        return render(request, 'admin/events/login.html')
+            return render(request, 'admin/events/login.html')
     else:
         return redirect('Signup')
+
+
 
     
   
