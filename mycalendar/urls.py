@@ -22,14 +22,16 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', views.Signup, name='Signup'),
+    url(r'^getname/$', views.get_name, name='get_name'),
+    url(r'mailing/$',views.mail, name='mailing'),
+    url(r'^$', views.home, name='home'),
+    url(r'^login/$', auth_views.LoginView.as_view(), {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/$', auth_views.LogoutView.as_view(), {'next_page': 'login'}, name='logout'),
+    
     # path('', user_views.home, name='home')
     # path('', include('events.urls')),
     # path('login/',auth_views.LoginView.as_view(template_name='events/login.html',name='login')),
     # path('logout/',auth_views.LoginView.as_view(template_name='events/logout.html',name='logout'))
  
-    url(r'^$', views.home, name='home'),
-    # url(r'^signup/$', user_views.signup, name='signup'),
-    url(r'^login/$', auth_views.LoginView.as_view(), {'template_name': 'login.html'}, name='login'),
-    url(r'^logout/$', auth_views.LogoutView.as_view(), {'next_page': 'login'}, name='logout'),
-    
+  
 ]

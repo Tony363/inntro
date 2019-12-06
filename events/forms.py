@@ -20,3 +20,23 @@ class SignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class NameForm(forms.Form):
+    your_name = forms.CharField(label='Your name', max_length=100)
+
+    class Meta:
+        model = User
+        fields = ('your_name')
+    def save(self, commit=True):
+        user = super(NameForm, self).save(commit=False)
+        user.your_name = self.cleaned_data['your_name']
+        if commit:
+            user.save()
+        return user
+
+class ContactForm(forms.Form):
+    subject = forms.CharField(max_length=100)
+    message = forms.CharField(widget=forms.Textarea)
+    sender = forms.EmailField()
+    cc_myself = forms.BooleanField(required=False)
+
