@@ -14,3 +14,6 @@ Head over to [http:localhost:8000/admin](http:localhost:8000/admin) and sign in 
 
 21/11/2019;
 fixed up the html models and integrated all most modals in the Learning_git branch
+
+6/12/2019;
+fixed up some POST data forms
