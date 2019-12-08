@@ -5,6 +5,7 @@ from .forms import SignUpForm, NameForm, ContactForm
 from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect,HttpResponse
 from django.core.mail import send_mail
+from django.views.decorators.csrf import csrf_protect,csrf_exempt
 
 
 # @login_required
@@ -12,9 +13,6 @@ def home(request):
     return render(request, 'admin/events/home.html/')
 
 def Signup(request):
-    # if request.method == 'GET':
-    #     form = SignUpForm(request.GET)
-    #     return render(request,'admin/events/signup.html',{'form':form})
         
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -39,11 +37,18 @@ def get_name(request):
         if form.is_valid():
             #reutrn new URL
             form.save()
-            return HttpResponse('at least i got it to work')
+            
+            return HttpResponse("thanks", content_type="text/plain")
     #if a GET(or any other method) we'll create a blannk form        
     else:
-        form = NameForm()
+        # form = NameForm()
+        return HttpResponse('{}'.format(NameForm))
     return render(request,'simple_form.html',{'form':form})
+
+@csrf_exempt
+def your_name(request):
+    if request.method == "GET":
+        return HttpResponse('thanks',content_type="text/plain")
 
 def mail(request):
     if request.method == 'POST':
