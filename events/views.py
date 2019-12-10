@@ -35,20 +35,22 @@ def get_name(request):
         form = NameForm(request.POST)
         #check if instance POST data is valid
         if form.is_valid():
-            #reutrn new URL
-            form.save()
-            
-            return HttpResponse("thanks", content_type="text/plain")
+            #return new URL
+            # form.save()
+            your_name = form.cleaned_data['your_name']
+            print(your_name)
+            # return HttpResponseRedirect('/thanks/')
+            return HttpResponse('{}'.format(your_name))
+           
     #if a GET(or any other method) we'll create a blannk form        
     else:
-        # form = NameForm()
-        return HttpResponse('{}'.format(NameForm))
+        form = NameForm()
+        # return HttpResponse('{}'.format(NameForm))
     return render(request,'simple_form.html',{'form':form})
 
 @csrf_exempt
 def your_name(request):
-    if request.method == "GET":
-        return HttpResponse('thanks',content_type="text/plain")
+    return HttpResponse('thanks',content_type="text/plain")
 
 def mail(request):
     if request.method == 'POST':
@@ -60,11 +62,16 @@ def mail(request):
             cc_myself = form.cleaned_data['cc_myself']
 
             recipients = ['info@example.com']
+            print(subject,message,sender)
             if cc_myself:
                 recipients.append(sender)
-            
-            send_mail(subject, message, sender,recipients)
-            return HttpResponseRedirect('/thanks/')
+                 
+            # send_mail(subject, message, sender,recipients)
+            return HttpResponse('/thanks/')
+    else:
+        form = ContactForm()
+       
+    return render(request,'contact_forms.html',{'form':form})
 
 
 

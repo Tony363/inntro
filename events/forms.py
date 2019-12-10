@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import your_name
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='')
@@ -22,17 +23,18 @@ class SignUpForm(UserCreationForm):
         return user
 
 class NameForm(forms.Form):
-    your_name = forms.CharField(label='Your name', max_length=100)
 
-    class Meta:
-        model = User
-        fields = ('your_name')
-    def save(self, commit=True):
-        user = super(NameForm, self).save(commit=False)
-        user.your_name = self.cleaned_data['your_name']
-        if commit:
-            user.save()
-        return user
+    your_name = forms.CharField(max_length=100)
+
+    # class Meta:
+    #     model = User
+    #     fields = ('your_name')
+    # def save(self, commit=True):
+    #     user = super(NameForm, self).save(commit=False)
+    #     user.your_name = self.cleaned_data['your_name']
+    #     if commit:
+    #         user.save()
+    #     return user
 
 class ContactForm(forms.Form):
     subject = forms.CharField(max_length=100)

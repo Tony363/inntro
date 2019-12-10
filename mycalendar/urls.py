@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', views.Signup, name='Signup'),
     url(r'^getname/$', views.get_name, name='get_name'),
-    url(r'^your-name/$', views.your_name,name='your_name'),
+    url(r'^thanks/$', views.your_name,name='your_name'),
     url(r'mailing/$',views.mail, name='mailing'),
     url(r'^$', views.home, name='home'),
     url(r'^login/$', auth_views.LoginView.as_view(), {'template_name': 'login.html'}, name='login'),

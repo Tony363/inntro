@@ -44,3 +44,9 @@ class Event(models.Model):
                     raise ValidationError(
                         'There is an overlap with another event: ' + str(event.day) + ', ' + str(
                             event.start_time) + '-' + str(event.end_time))
+
+class your_name(models.Model):
+    your_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.your_name
