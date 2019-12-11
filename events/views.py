@@ -36,7 +36,7 @@ def get_name(request):
         #check if instance POST data is valid
         if form.is_valid():
             #return new URL
-            # form.save()
+            form.save()
             your_name = form.cleaned_data['your_name']
             print(your_name)
             # return HttpResponseRedirect('/thanks/')

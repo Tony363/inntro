@@ -50,3 +50,12 @@ class your_name(models.Model):
 
     def __str__(self):
         return self.your_name
+
+class Email_form(models.Model):
+    subject = models.CharField(max_length=100)
+    message = models.CharField(max_length=100)
+    sender = models.EmailField()
+    cc_myself = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.subject, self.message, self.sender
