@@ -37,10 +37,10 @@ class NameForm(forms.ModelForm):
         return user
 
 class ContactForm(forms.ModelForm):
-    subject = forms.CharField(max_length=100)
-    message = forms.CharField(widget=forms.Textarea)
-    sender = forms.EmailField()
-    cc_myself = forms.BooleanField(required=False)
+    # subject = forms.CharField(max_length=100)
+    # message = forms.CharField(widget=forms.Textarea)
+    # sender = forms.EmailField()
+    # cc_myself = forms.BooleanField(required=False)
 
     class Meta:
         model = Email_form
