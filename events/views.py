@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
-from .forms import SignUpForm, NameForm, ContactForm
+from .forms import SignUpForm, NameForm, ContactForm,ToDo
+from .models import TodoList
 from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect,HttpResponse
 from django.core.mail import send_mail
@@ -10,7 +11,19 @@ from django.views.decorators.csrf import csrf_protect,csrf_exempt
 
 # @login_required
 def home(request):
-    return render(request, 'admin/events/home.html/')
+    if request.method == 'POST':
+        form = ToDo(request.POST)
+        List = TodoList.objects.ordered_by('id')
+
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            return HttpResponse(f'{title}:{content}',content_type="text/plain")
+
+    else:
+        form = ToDo()
+   
+    return render(request, 'admin/events/home.html/',{'ToDoList':TodoList,'form':form})
 
 def Signup(request):
         

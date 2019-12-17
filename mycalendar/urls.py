@@ -28,6 +28,10 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^login/$', auth_views.LoginView.as_view(), {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), {'next_page': 'login'}, name='logout'),
+    url(r'add/$',views.home, name='add'),
+    url(r'deletecomplete/$',views.home,name='deletecomplete'),
+    url(r'deleteall/$',views.home, name='deleteall'),
+    url(r'complete/$',views.home,name='complete')
     
     # path('', user_views.home, name='home')
     # path('', include('events.urls')),

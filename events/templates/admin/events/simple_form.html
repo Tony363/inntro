@@ -1,6 +1,7 @@
 <form method="post">
     {% csrf_token %}
-    {{ form }}
+    {{form}}
+    {{ form.first_aid }}
     <input type="submit" value="Submit">
 </form>
 <!-- <form action="/getname/" method="post">

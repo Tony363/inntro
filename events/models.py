@@ -48,6 +48,8 @@ class Event(models.Model):
 
 class your_name(models.Model):
     your_name = models.CharField(max_length=100)
+    checkbox = models.BooleanField(default=False)
+    
 
     def __str__(self):
         return self.your_name
@@ -63,6 +65,7 @@ class Email_form(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+   
 
     class Meta:
         verbose_name = ('Category')
@@ -75,7 +78,7 @@ class TodoList(models.Model):
     title = models.CharField(max_length=250)
     content = models.TextField(blank=True)
     created = models.DateField(default=timezone.now().strftime('%Y-%m-%d'))
-    # category = models.ForeignKey(Category,default='general',on_delete=models.CASCADE)
+    # category = models.ForeignKey(Category,on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
 
     class Meta:
