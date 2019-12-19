@@ -49,7 +49,7 @@ class ContactForm(forms.ModelForm):
 
 class ToDo(forms.ModelForm):
 
-    # text = forms.CharField(max_length=100)
+    text = forms.CharField(max_length=100)
 
     class Meta:
         model = TodoList

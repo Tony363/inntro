@@ -5,6 +5,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils import timezone
+import datetime
 
 
 # Create your models here.
@@ -80,11 +81,21 @@ class TodoList(models.Model):
     created = models.DateField(default=timezone.now().strftime('%Y-%m-%d'))
     # category = models.ForeignKey(Category,on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
+    pub_date = models.DateTimeField('date published', auto_now=True)
 
     class Meta:
         ordering = ['-created']
 
     def __str__(self):
         return self.title
-
-
+    def was_published_recently(self):
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
+    was_published_recently.admin_order_field = 'pub_date'
+    was_published_recently.boolean = True
+    was_published_recently.short_description = 'Published recently'
+class completed_todo(models.Model):
+    completed_title = models.ForeignKey(TodoList,on_delete=models.CASCADE)
+    title_text = models.CharField(max_length=200)
+    def __str__(self):
+        return self.title_text

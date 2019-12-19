@@ -11,19 +11,21 @@ from django.views.decorators.csrf import csrf_protect,csrf_exempt
 
 # @login_required
 def home(request):
+    tasks = TodoList.objects.all()
     if request.method == 'POST':
         form = ToDo(request.POST)
-        List = TodoList.objects.ordered_by('id')
+        # List = TodoList.objects.ordered_by('id')
 
         if form.is_valid():
             title = form.cleaned_data['title']
             content = form.cleaned_data['content']
-            return HttpResponse(f'{title}:{content}',content_type="text/plain")
+            # return HttpResponse(f'{title}:{content}',content_type="text/plain")
+            return redirect('/')
 
     else:
         form = ToDo()
    
-    return render(request, 'admin/events/home.html/',{'ToDoList':TodoList,'form':form})
+    return render(request, 'admin/events/home.html/',{'tasks':tasks,'form':form})#'ToDoList':TodoList
 
 def Signup(request):
         
