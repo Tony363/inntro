@@ -26,7 +26,7 @@ class SignUpForm(UserCreationForm):
 class NameForm(forms.ModelForm):
 
     # your_name = forms.CharField(max_length=100)
-
+    
     class Meta:
         model = your_name
         fields = ['your_name']
@@ -49,11 +49,11 @@ class ContactForm(forms.ModelForm):
 
 class ToDo(forms.ModelForm):
 
-    text = forms.CharField(max_length=100)
+    # text = forms.CharField(max_length=100)
 
     class Meta:
         model = TodoList
-        fields = ['title','created','content','completed']
+        fields = ['title','created','content','completed','Text']
 
 
 

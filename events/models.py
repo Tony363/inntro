@@ -82,6 +82,7 @@ class TodoList(models.Model):
     # category = models.ForeignKey(Category,on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
     pub_date = models.DateTimeField('date published', auto_now=True)
+    Text = models.CharField(max_length=100)
 
     class Meta:
         ordering = ['-created']
@@ -94,6 +95,7 @@ class TodoList(models.Model):
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently'
+
 class completed_todo(models.Model):
     completed_title = models.ForeignKey(TodoList,on_delete=models.CASCADE)
     title_text = models.CharField(max_length=200)

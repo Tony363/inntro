@@ -11,19 +11,24 @@ from django.views.decorators.csrf import csrf_protect,csrf_exempt
 
 # @login_required
 def home(request):
+    inital_data = {
+        'title':"My awesome title",
+        'content':'insert some content',
+        "Text":'some side notes here',
+    }
     tasks = TodoList.objects.all()
     if request.method == 'POST':
-        form = ToDo(request.POST)
+        form = ToDo(request.POST or None, instance=tasks)
         # List = TodoList.objects.ordered_by('id')
 
         if form.is_valid():
             title = form.cleaned_data['title']
             content = form.cleaned_data['content']
-            # return HttpResponse(f'{title}:{content}',content_type="text/plain")
-            return redirect('/')
+            return HttpResponse(f'{title}:{content}',content_type="text/plain")
+            # return redirect('/')
 
     else:
-        form = ToDo()
+        form = ToDo(initial=inital_data)
    
     return render(request, 'admin/events/home.html/',{'tasks':tasks,'form':form})#'ToDoList':TodoList
 
