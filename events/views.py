@@ -7,7 +7,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect,HttpResponse
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_protect,csrf_exempt
-
+from django.forms.models import model_to_dict
 
 # @login_required
 def home(request):
@@ -16,6 +16,7 @@ def home(request):
         'content':'insert some content',
         "Text":'some side notes here',
     }
+    
     tasks = TodoList.objects.all()
     if request.method == 'POST':
         form = ToDo(request.POST or None, instance=tasks)
@@ -33,9 +34,14 @@ def home(request):
     return render(request, 'admin/events/home.html/',{'tasks':tasks,'form':form})#'ToDoList':TodoList
 
 def Signup(request):
-        
+    inital_data = {
+        'email':form.cleaned_data['email'],
+        'first_name':form.cleaned_data['first_name'],
+        "last_name":form.cleaned_data['last_name'],
+    }
+    data = SignUpForm.objects.all()
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = SignUpForm(request.POST or None, instance=data)
        
         if form.is_valid():
           
@@ -45,7 +51,7 @@ def Signup(request):
             form.save()
             return render(request, 'admin/events/login.html')
     else:
-        form = SignUpForm()
+        form = SignUpForm(initial=inital_data)
     return render(request,'signup.html', {'form':form})
 
 def get_name(request):
