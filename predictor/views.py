@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 
 import yfinance as yf 
 import pandas as pd 
+import numpy as np
 import xgboost as xgb
 import requests
 import json 
@@ -30,7 +31,7 @@ dic_r = json.loads(r.content)
 
 def yahoo_finance_history(request):
     if request.method == 'GET':
-        requested_stock = yf.Ticker(request.form.get('stock'))
+        requested_stock = yf.Ticker('TSLA')
         history = requested_stock.history(period='max')
         stock = pd.DataFrame(history)
         stock_changes = stock.pct_change()
@@ -38,7 +39,7 @@ def yahoo_finance_history(request):
         stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
         stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
         stock_matrix.columns = [ f'Day {i+1}'for i in range(len(stock_matrix.columns))]
-        return HttpResponse(stock_matrix)
+        return HttpResponse(np.asarray(stock_matrix))
 
 # Create your views here.
 def Alpaca_order_manager(request,symbol,qty,side,tpe,time_in_force):
