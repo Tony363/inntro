@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 
 
+
 # Create your models here.
 
 class Event(models.Model):
@@ -44,3 +45,14 @@ class Event(models.Model):
                     raise ValidationError(
                         'There is an overlap with another event: ' + str(event.day) + ', ' + str(
                             event.start_time) + '-' + str(event.end_time))
+
+
+
+
+class Index(models.Model):
+    stock = models.CharField(max_length=100)
+    checkbox = models.BooleanField(default=False)
+    
+
+    def __str__(self):
+        return self.stock
