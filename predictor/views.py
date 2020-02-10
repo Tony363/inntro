@@ -29,6 +29,19 @@ r = requests.get(Account_url,headers=Headers)
 
 dic_r = json.loads(r.content)
 
+def Index(request):
+    Initial_value = {
+        
+    }
+    if request.method == 'POST':
+        form = form.Index(request.POST)
+        if form.is_valid():
+            stock = form.cleaned_data['stock']
+            return render(request,'result.html',stock=stock)
+    else:
+        form = form.Index()
+    return render(request,'predictions.html')
+
 def yahoo_finance_history(request):
     if request.method == 'GET':
         requested_stock = yf.Ticker('TSLA')
