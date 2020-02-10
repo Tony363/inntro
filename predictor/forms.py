@@ -2,10 +2,16 @@ from django import forms
 from .models import Index
 
 
-class Index_form(models.Model):
-    stock = models.CharField(max_length=100)
-    # checkbox = models.BooleanField(default=False)
+class Index_form(forms.ModelForm):
     
+    
+    class Meta():
+        model = Index
+        fields = ['stock']
 
-    def __str__(self):
-        return self.stock
+    def save(self, commit=True):
+        user = super(Index_form, self).save(commit=False)
+        user.stock = self.cleaned_data['stock']
+        if commit:
+            user.save()
+        return user
