@@ -21,6 +21,6 @@ from predictor import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'',views.Index,name='Index'),
-    url(r'predict',views.yahoo_finance_history,name='yahoo_data')
+    url(r'predict',views.yahoo_finance_history,name='yahoo_data'),
     path('regression', views.call_model.as_view()),
 ]
