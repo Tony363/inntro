@@ -15,15 +15,14 @@ class EventsConfig(AppConfig):
 class PredictorConfig(AppConfig):
 
     # create path to models
-    path = os.path.join(settings.MODELS,'model.pk1')
+    path = os.path.join(settings.MODELS,'xgbregression.model')
 
     # load models into separate variables
     # these will be accessible via this class 
-    with open(path,'rb') as pickled:
-        data = pickle.load(pickled)
+    loaded_models = xgb.Booster()
+    loaded_models.load_model(path)
 
 
-    #  regressor = data['regressor']
-    # vectorizer = data['vectorizer']
+    
 
     
