@@ -14,7 +14,6 @@ def sum_list(lst,total = 0):
 
 def recursion_list(lst,total = 0):
    
-
     if len(lst) == 0:
         return total
 
@@ -35,10 +34,6 @@ def to_string(number):
     return '{}'.format(number)
 
 print(f'i am {to_string(18)} years old')
-
-
-
-            
 
 
 # Write a Python program to get the factorial of a non-negative integer. 
@@ -115,4 +110,12 @@ print(harmonic_sum(6))
 def a_to_power_b(a,b):
     return a**b
 
+def greatest_common_divisor(a,b):
+    if(b==0): 
+        return a 
+    else: 
+        return greatest_common_divisor(b,a%b) 
+   
+print(greatest_common_divisor(4,14))
+    
 
