@@ -96,16 +96,17 @@ def harmonic_sum(n,count = 1,addition = 0):
 
 print(harmonic_sum(6))
 
-# def geometric_sum(n,ratio,total = 0,count = 0):
-#     total = total + (n * ratio)
-#     print(total)
-#     if count == n:
-#         return total
-#     else:
-#         count += 1
-#         return geometric_sum(n,ratio,total)
+def geometric_sum(n,ratio,total = 1,count = 0):
+    # print(total)
+    if count == n:
+        return total
+    else:
+        total = total + ratio
+        ratio *= ratio
+        count += 1
+        return geometric_sum(n,ratio,total,count)
 
-# print(geometric_sum(3,.5))
+print(geometric_sum(3,.5))
 
 def a_to_power_b(a,b):
     return a**b
