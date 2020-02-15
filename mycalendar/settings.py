@@ -122,3 +122,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MODELS = os.path.join(BASE_DIR,'predictor/models')
+
+SERVER_DIR = '/home/tony/Desktop/github_repos/Dataquest-modules/My_Notebooks/media/'
+
+MEDIA_ROOT = os.path.join(SERVER_DIR,'media')
+MEDIA_URL = os.path.join(SERVER_DIR,'media/')
+
+OUTPUT_DIR = os.path.join(SERVER_DIR,'predictor/models/')
+DATA_ROOT = os.path.join(SERVER_DIR,'predictor/models')
