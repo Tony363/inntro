@@ -15,9 +15,11 @@ import yfinance as yf
 import pandas as pd 
 import numpy as np
 import xgboost as xgb
+import matplotlib.pyplot as plt
 import requests
 import json 
 import os
+import shap
 
 Alpaca_API_key = 'PKLQHCF2P3VRXDC4LBBW'
 
@@ -44,7 +46,10 @@ def Index(request):
         form = Index_form(request.POST)
         if form.is_valid():
             stock = form.cleaned_data['stock']
+            
             requested_stock = yf.Ticker(stock)
+            if not requested_stock:
+                return HttpResponse('wrong stock')
             history = requested_stock.history(period='max')
             stock = pd.DataFrame(history)
             stock_changes = stock.pct_change()
@@ -52,17 +57,32 @@ def Index(request):
             stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
             stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
             stock_matrix.columns = [ f'Day {i+1}'for i in range(len(stock_matrix.columns))]
-            # print(stock_matrix)
-            X = np.asarray(stock_matrix.loc[:,'Day 2':])
-            y = np.asarray(stock_matrix['Day 1'])
+           
+            X = stock_matrix.loc[:,'Day 2':]
+            y = stock_matrix['Day 1']
             X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
             dtrain = xgb.DMatrix(X_train,y_train)
             dtest = xgb.DMatrix(X_test,y_test)
+
             loaded_models = xgb.Booster()
             loaded_models.load_model(path)
             prediction = loaded_models.predict(dtest)
             prediction = np.asarray(prediction)
-            print(prediction)
+             
+    
+            explainer = shap.TreeExplainer(loaded_models)
+            shap_values_XGB_test = explainer.shap_values(X_test)
+            shap_values_XGB_train = explainer.shap_values(X_train)
+
+            df_shap_XGB_test = pd.DataFrame(shap_values_XGB_test)
+            df_shap_XGB_train = pd.DataFrame(shap_values_XGB_train)
+            shap.force_plot(explainer.expected_value,shap_values_XGB_test[0],X_test.iloc[[0]],show=False,matplotlib=True).savefig(
+        '/home/tony/Desktop/github_repos/Dataquest-modules/My_Notebooks/media/shap.png')
+            
+            image_data = open('/home/tony/Desktop/github_repos/Dataquest-modules/My_Notebooks/media/shap.png','rb').read()
+
+            return HttpResponse(image_data,content_type='image/png')
+        else: 
             return render(request,'results.html',{'prediction':prediction})
     else:
         form = Index_form()

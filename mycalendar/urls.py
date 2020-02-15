@@ -17,9 +17,14 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path
 from predictor import views
+from django.conf import settings
+from django.views.static import serve
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'',views.Index,name='Index'),
+    url(r'^/home/tony/Desktop/github_repos/Dataquest-modules/My_Notebooks/media/best_model_bar.png$', serve,{
+        'document_root': settings.MEDIA_ROOT,
+    }),
     path('regression', views.call_model.as_view()),
 ]
