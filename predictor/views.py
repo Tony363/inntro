@@ -46,10 +46,12 @@ def Index(request):
         form = Index_form(request.POST)
         if form.is_valid():
             stock = form.cleaned_data['stock']
-            
-            requested_stock = yf.Ticker(stock)
-            if not requested_stock:
-                return HttpResponse('wrong stock')
+
+            try:
+                requested_stock = yf.Ticker(stock)
+                print(requested_stock.info)
+            except ValueError:
+                return render(request,'predictions.html',{'form':form})
             history = requested_stock.history(period='max')
             stock = pd.DataFrame(history)
             stock_changes = stock.pct_change()
@@ -77,11 +79,11 @@ def Index(request):
             df_shap_XGB_test = pd.DataFrame(shap_values_XGB_test)
             df_shap_XGB_train = pd.DataFrame(shap_values_XGB_train)
             shap.force_plot(explainer.expected_value,shap_values_XGB_test[0],X_test.iloc[[0]],show=False,matplotlib=True).savefig(
-        '/home/tony/Desktop/github_repos/Dataquest-modules/My_Notebooks/media/shap.png')
+        '/home/tony/Desktop/github_repos/inntro/predictor/static/image/shap.png')
             
-            image_data = open('/home/tony/Desktop/github_repos/Dataquest-modules/My_Notebooks/media/shap.png','rb').read()
+            image_data = open('/home/tony/Desktop/github_repos/inntro/predictor/static/image/shap.png','rb').read()
 
-            return HttpResponse(image_data,content_type='image/png')
+            return render(request,'results.html',{'image_data':image_data},content_type='image/png')
         else: 
             return render(request,'results.html',{'prediction':prediction})
     else:
