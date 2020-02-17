@@ -63,10 +63,11 @@ def home(request):
 
 
 def visualization(request):
-    print("wtf")
+    # print("wtf")
     path = os.path.join(settings.MODELS,'xgbregression.model')
 
-    if request.method == 'POST':
+    if request.method == 'GET':
+        print('wtf')
         stock = Index.objects.all().last()
         
         requested_stock = yf.Ticker(str(stock))
@@ -78,11 +79,13 @@ def visualization(request):
         stock_changes.drop(stock_changes.index[0],inplace=True)
         stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
         stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
-        stock_matrix.columns = [ f'Day {i+1}'for i in range(len(stock_matrix.columns))]
+        stock_matrix.columns = [ f'Days_{i+1}'for i in range(len(stock_matrix.columns))]
         
-        X = stock_matrix.loc[:,'Day 2':]
-        y = stock_matrix['Day 1']
+        X = stock_matrix.loc[:,'Days_2':]
+        y = stock_matrix['Days_1']
+
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
+
         dtrain = xgb.DMatrix(X_train,y_train)
         dtest = xgb.DMatrix(X_test,y_test)
 
@@ -98,13 +101,23 @@ def visualization(request):
 
         df_shap_XGB_test = pd.DataFrame(shap_values_XGB_test)
         df_shap_XGB_train = pd.DataFrame(shap_values_XGB_train)
-        shap.force_plot(explainer.expected_value,shap_values_XGB_test[0],X_test.iloc[[0]],show=False,matplotlib=True).savefig(
-    '/home/tony/Desktop/github_repos/inntro/predictor/static/image/shap.png')
+
+        shap.force_plot(explainer.expected_value,shap_values_XGB_test[0],X_test.iloc[[0]],show=False,matplotlib=True).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/initial.png')
+        shap.force_plot(explainer.expected_value,shap_values_XGB_test,X_test).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/wave_plot.png')
+        s_plot = plt.figure()
+        shap.summary_plot(shap_values_XGB_train,X_train,plot_type='bar')
+        s_plot.savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/barplot.png')
+       
+        s_plot = plt.figure()
+        shap.summary_plot(shap_values_XGB_train,X_train)
+        s_plot.savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/shap_value.png')
+     
+        # shap.dependence_plot('Days_1',shap_values_XGB_train,X_train).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/scatter.png')
         print(prediction)
 
-        return render(request,'image.html')
-
-    return render(request,'images.html')
+        return render(request,'images.html')
+    else:
+        return render(request,'images.html')
 
 
 

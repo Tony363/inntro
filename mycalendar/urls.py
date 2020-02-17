@@ -24,8 +24,8 @@ from django.views.static import serve
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('',include('predictor.urls')),
-    # url(r'visualization',visualization,name='ho'),
-    url(r'', home,name='visual'),
+    url(r'^visualization/$',visualization,name='visualization'),
+    url(r'', home,name='home'),
 
     path('regression', call_model.as_view()),
 ]
