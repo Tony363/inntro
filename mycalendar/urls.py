@@ -16,13 +16,16 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path
-from predictor import views
+
+from predictor.views import *
 from django.conf import settings
 from django.views.static import serve
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'',views.home,name='home'),
-    path('/visualization/', views.visualization, name='visualization'),
-    path('regression', views.call_model.as_view()),
+    path('',include('predictor.urls')),
+    # url(r'visualization',visualization,name='ho'),
+    url(r'', home,name='visual'),
+
+    path('regression', call_model.as_view()),
 ]
