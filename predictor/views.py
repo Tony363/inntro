@@ -6,6 +6,7 @@ from .apps import PredictorConfig
 from django.http import HttpResponse, HttpResponseRedirect,JsonResponse,request
 from rest_framework.views import APIView
 from django.conf import settings
+from django.urls import reverse
 
 from .forms import Index_form
 from .models import Index
@@ -50,22 +51,22 @@ def home(request):
                 print(requested_stock.info)
                 form.save()
             except ValueError:
-                return render(request,'predictions.html')
-            return redirect('/visualization/')
+               return render(request,'predictions.html')
+            
+            return redirect('visualization')
        
     else:
         form = Index_form()
 
-    return render(request,'predictions.html',{'form':form})
+        return render(request,'predictions.html',{'form':form})
 
 
 
 def visualization(request):
-
-    path = os.path.join(settings.MODELS,'xgbregression.model')
     print("wtf")
-    form = Index_form()
-    if request.method == 'GET':
+    path = os.path.join(settings.MODELS,'xgbregression.model')
+
+    if request.method == 'POST':
         stock = Index.objects.all().last()
         
         requested_stock = yf.Ticker(str(stock))
@@ -101,14 +102,15 @@ def visualization(request):
     '/home/tony/Desktop/github_repos/inntro/predictor/static/image/shap.png')
         print(prediction)
 
-        return render(request,'images.html')
+        return render(request,'image.html')
 
-    # return render(request,'predictions.html',{'form':form})
+    return render(request,'images.html')
 
 
 
 # Create your views here.
 def Alpaca_order_manager(request,symbol,qty,side,tpe,time_in_force):
+    print('wtf')
     data = {
         'symbol':symbol,
         'qty':qty,
