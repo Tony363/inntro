@@ -22,9 +22,7 @@ from django.views.static import serve
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'',views.Index,name='Index'),
-    url(r'^/home/tony/Desktop/github_repos/Dataquest-modules/My_Notebooks/media/best_model_bar.png$', serve,{
-        'document_root': settings.MEDIA_ROOT,
-    }),
+    url(r'',views.home,name='home'),
+    url(r'^visualization/$', views.visualization, name='visualization'),
     path('regression', views.call_model.as_view()),
 ]
