@@ -23,6 +23,6 @@ from django.views.static import serve
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'',views.home,name='home'),
-    url(r'^visualization/$', views.visualization, name='visualization'),
+    path('/visualization/', views.visualization, name='visualization'),
     path('regression', views.call_model.as_view()),
 ]

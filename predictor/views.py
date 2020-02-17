@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .apps import PredictorConfig
 from django.http import HttpResponse, HttpResponseRedirect,JsonResponse,request
 from rest_framework.views import APIView
@@ -46,12 +46,12 @@ def home(request):
             
             try:
                 stock = form.cleaned_data['stock']
-                requested_stock = yf.Ticker(stock)
-                print(requested_stock)
+                requested_stock = yf.Ticker(str(stock))
+                print(requested_stock.info)
                 form.save()
             except ValueError:
                 return render(request,'predictions.html')
-            return HttpResponseRedirect('whatthefuck')
+            return redirect('/visualization/')
        
     else:
         form = Index_form()
@@ -65,9 +65,10 @@ def visualization(request):
     path = os.path.join(settings.MODELS,'xgbregression.model')
     print("wtf")
     form = Index_form()
-    if request.method == 'POST':
+    if request.method == 'GET':
         stock = Index.objects.all().last()
-        requested_stock = yf.Ticker(stock.upper())
+        
+        requested_stock = yf.Ticker(str(stock))
 
 
         history = requested_stock.history(period='max')
