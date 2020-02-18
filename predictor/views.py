@@ -92,7 +92,7 @@ def visualization(request):
         y_train.to_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/y_train.csv')
         y_test.to_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/y_test.csv')
 
-        print(pd.read_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/y_test.csv'))
+    
         
         dtrain = xgb.DMatrix(X_train,y_train)
         dtest = xgb.DMatrix(X_test,y_test)
