@@ -1,8 +1,44 @@
-{% load static %}
-<form  method="get" >
-    <img src="{% static 'image/initial.png' %}"/>
-    <img src="{% static 'image/barplot.png' %}"/>
-    <img src="{% static 'image/shap_value.png' %}"/>
-    <img src="{% static 'image/wave_plot.png' %}"/>
-    <li><a action='home'>HOME</a></li>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <styel>
+            .image {
+                margin: 0;
+                padding: 0;
+            }
+            .imgbox {
+                display: grid;
+                height: 100%;
+            }
+            .center-fit {
+                max-width: 100%;
+                max-height: 100vh;
+                margin: auto;
+            }
+        </styel>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <title>Visualization</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    <h1 class='mt-2'>graph</h1>
+                    <hr class='mt-0 mb-4'>
+                    {% load static %}
+                    <form  method="get" >
+                        <img class='image' src="{% static 'image/initial.png' %}"/>
+                        <img src="{% static 'image/barplot.png' %}"/>
+                        <img src="{% static 'image/shap_value.png' %}"/>
+                        <img src="{% static 'image/wave_plot.png' %}"/>
+                        <li><a action='home'>HOME</a></li>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

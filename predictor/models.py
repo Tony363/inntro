@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.urls import reverse
+from ndarray import NDArrayField
 
 
 
@@ -51,6 +52,6 @@ class Event(models.Model):
 
 class Index(models.Model):
     stock = models.CharField(max_length=100)
-
+  
     def __str__(self):
         return self.stock

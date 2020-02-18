@@ -12,6 +12,7 @@ from .forms import Index_form
 from .models import Index
 
 from sklearn.model_selection import train_test_split
+from numpy import genfromtxt
 import yfinance as yf 
 import pandas as pd 
 import numpy as np
@@ -86,6 +87,13 @@ def visualization(request):
 
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
 
+        X_train.to_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/X_train.csv')
+        X_test.to_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/X_test.csv')
+        y_train.to_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/y_train.csv')
+        y_test.to_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/y_test.csv')
+
+        print(pd.read_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/y_test.csv'))
+        
         dtrain = xgb.DMatrix(X_train,y_train)
         dtest = xgb.DMatrix(X_test,y_test)
 
@@ -113,7 +121,7 @@ def visualization(request):
         s_plot.savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/shap_value.png')
      
         # shap.dependence_plot('Days_1',shap_values_XGB_train,X_train).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/scatter.png')
-        print(prediction)
+        # print(prediction)
 
         return render(request,'images.html')
     else:
