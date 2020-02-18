@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <styel>
+        <style>
             .image {
                 margin: 0;
                 padding: 0;
@@ -15,7 +15,10 @@
                 max-height: 100vh;
                 margin: auto;
             }
-        </styel>
+            img{
+                width:100%;
+            }
+        </style>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -24,17 +27,28 @@
     <body>
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-8">
+                <div class="col-12">
                     <h1 class='mt-2'>graph</h1>
                     <hr class='mt-0 mb-4'>
                     {% load static %}
-                    <form  method="get" >
-                        <img class='image' src="{% static 'image/initial.png' %}"/>
-                        <img src="{% static 'image/barplot.png' %}"/>
-                        <img src="{% static 'image/shap_value.png' %}"/>
-                        <img src="{% static 'image/wave_plot.png' %}"/>
-                        <li><a action='home'>HOME</a></li>
-                    </form>
+                    
+                    <img class='image' src="{% static 'image/initial.png' %}"/>
+                    <div class="row">
+                        <div class="col-6">
+                            <img src="{% static 'image/barplot.png' %}" alt="" />
+                            <p></p>
+                        </div>
+                        <div class="col-6">
+                            <img src="{% static 'image/shap_value.png' %}"/>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <img src="{% static 'image/wave_plot.png' %}"/>
+                        </div>
+                    </div>
+                    
+                  
 
                 </div>
             </div>
