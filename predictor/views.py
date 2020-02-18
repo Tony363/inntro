@@ -103,7 +103,7 @@ def visualization(request):
         df_shap_XGB_train = pd.DataFrame(shap_values_XGB_train)
 
         shap.force_plot(explainer.expected_value,shap_values_XGB_test[0],X_test.iloc[[0]],show=False,matplotlib=True).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/initial.png')
-        shap.force_plot(explainer.expected_value,shap_values_XGB_test,X_test).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/wave_plot.png')
+        # shap.force_plot(explainer.expected_value,shap_values_XGB_test,X_test).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/wave_plot.png')
         s_plot = plt.figure()
         shap.summary_plot(shap_values_XGB_train,X_train,plot_type='bar')
         s_plot.savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/barplot.png')
