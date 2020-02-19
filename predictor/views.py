@@ -112,9 +112,8 @@ def visualization(request):
 
         shap.force_plot(explainer.expected_value,shap_values_XGB_test[0],X_test.iloc[[0]],show=False,matplotlib=True).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/initial.png')
         
-        s_plot = plt.figure()
-        shap.force_plot(explainer.expected_value,shap_values_XGB_test,X_test,show=False)
-        s_plot.savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/wave_plot.png')
+       
+        shap.save_html('/home/tony/Desktop/github_repos/inntro/predictor/static/image/wave_plot.html',shap.force_plot(explainer.expected_value,shap_values_XGB_test,X_test,show=False))
 
         s_plot = plt.figure()
         shap.summary_plot(shap_values_XGB_train,X_train,plot_type='bar',show=False)
