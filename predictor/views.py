@@ -87,10 +87,10 @@ def visualization(request):
 
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
 
-        X_train.to_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/X_train.csv')
-        X_test.to_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/X_test.csv')
-        y_train.to_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/y_train.csv')
-        y_test.to_csv('/home/tony/Desktop/github_repos/inntro/predictor/static/numpy_array/y_test.csv')
+        X_train.to_csv('/home/tony/Desktop/My_repos/inntro/predictor/static/numpy_array/X_train.csv')
+        X_test.to_csv('/home/tony/Desktop/My_repos/inntro/predictor/static/numpy_array/X_test.csv')
+        y_train.to_csv('/home/tony/Desktop/My_repos/inntro/predictor/static/numpy_array/y_train.csv')
+        y_test.to_csv('/home/tony/Desktop/My_repos/inntro/predictor/static/numpy_array/y_test.csv')
 
     
         
@@ -110,18 +110,18 @@ def visualization(request):
         df_shap_XGB_test = pd.DataFrame(shap_values_XGB_test)
         df_shap_XGB_train = pd.DataFrame(shap_values_XGB_train)
 
-        shap.force_plot(explainer.expected_value,shap_values_XGB_test[0],X_test.iloc[[0]],show=False,matplotlib=True).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/initial.png')
+        shap.force_plot(explainer.expected_value,shap_values_XGB_test[0],X_test.iloc[[0]],show=False,matplotlib=True).savefig('/home/tony/Desktop/My_repos/inntro/predictor/static/image/initial.png')
         
        
-        shap.save_html('/home/tony/Desktop/github_repos/inntro/predictor/static/image/wave_plot.html',shap.force_plot(explainer.expected_value,shap_values_XGB_test,X_test,show=False))
+        shap.save_html('/home/tony/Desktop/My_repos/inntro/predictor/static/image/wave_plot.html',shap.force_plot(explainer.expected_value,shap_values_XGB_test,X_test,show=False))
 
         s_plot = plt.figure()
         shap.summary_plot(shap_values_XGB_train,X_train,plot_type='bar',show=False)
-        s_plot.savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/barplot.png')
+        s_plot.savefig('/home/tony/Desktop/My_repos/inntro/predictor/static/image/barplot.png')
        
         s_plot = plt.figure()
         shap.summary_plot(shap_values_XGB_train,X_train,show=False)
-        s_plot.savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/shap_value.png')
+        s_plot.savefig('/home/tony/Desktop/My_repos/inntro/predictor/static/image/shap_value.png')
      
         # shap.dependence_plot('Days_1',shap_values_XGB_train,X_train).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/scatter.png')
         # print(prediction)
