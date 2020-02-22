@@ -57,7 +57,7 @@ ROOT_URLCONF = 'mycalendar.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,3 +132,5 @@ MEDIA_URL = os.path.join(SERVER_DIR,'media/')
 
 OUTPUT_DIR = os.path.join(SERVER_DIR,'predictor/models/')
 DATA_ROOT = os.path.join(SERVER_DIR,'predictor/models')
+
+LOGIN_REDIRECT_URL = '/'

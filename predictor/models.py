@@ -49,7 +49,12 @@ class Event(models.Model):
                             event.start_time) + '-' + str(event.end_time))
 
 
+class login(models.Model):
+    username = models.CharField(max_length=100)
+    password = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.username,self.password
 
 class Index(models.Model):
     stock = models.CharField(max_length=100)
@@ -72,3 +77,4 @@ class save_data(models.Model):
         return self.csv
     def __repr__(self):
         return self.X_train,self.X_test,self.y_train,self.y_test
+

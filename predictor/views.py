@@ -8,9 +8,10 @@ from rest_framework.views import APIView
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.contrib.auth.models import User
 
 from .forms import *
-from .models import Index
+from .models import *
 
 from sklearn.model_selection import train_test_split
 from wsgiref.util import FileWrapper
@@ -39,6 +40,8 @@ r = requests.get(Account_url,headers=Headers)
 
 dic_r = json.loads(r.content)
 
+
+
 def home(request):
      
     if request.method == 'POST':
@@ -62,7 +65,7 @@ def home(request):
             except ValueError:
                return render(request,'predictions.html')
             
-            return redirect('visualization')
+            return redirect('predictor/visualization/')
        
     else:
         form = Index_form()
