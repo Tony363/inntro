@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('',include('django.contrib.auth.urls')),
     path('predictor/',include('predictor.urls')),
-    # url(r'', home,name='home'),
+    url(r'', home,name='home'),
 
     path('regression', call_model.as_view()),
 ]
