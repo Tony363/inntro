@@ -5,6 +5,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from ndarray import NDArrayField
+from datetime import datetime
 
 
 
@@ -52,6 +53,22 @@ class Event(models.Model):
 
 class Index(models.Model):
     stock = models.CharField(max_length=100)
-  
+    start_date = models.CharField(max_length=100,default='2002-01-01')
+    end_date = models.CharField(max_length=100,default=str(datetime.now().date()))
+    
     def __str__(self):
-        return self.stock
+        return self.stock, self.start_date,self.end_date,
+    
+
+class save_data(models.Model):
+    csv = models.CharField(max_length=100)
+    X_train = NDArrayField()
+    X_test = NDArrayField()
+    y_train = NDArrayField()
+    y_test = NDArrayField()
+  
+
+    def __str__(self):
+        return self.csv
+    def __repr__(self):
+        return self.X_train,self.X_test,self.y_train,self.y_test
