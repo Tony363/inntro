@@ -133,4 +133,6 @@ MEDIA_URL = os.path.join(SERVER_DIR,'media/')
 OUTPUT_DIR = os.path.join(SERVER_DIR,'predictor/models/')
 DATA_ROOT = os.path.join(SERVER_DIR,'predictor/models')
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'home/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -62,10 +62,10 @@ def home(request):
                 requested_stock = yf.Ticker(str(stock))
                 print(requested_stock.info)
                 
-            except ValueError:
+            except Exception:
                return render(request,'predictions.html')
             
-            return redirect('predictor/visualization/')
+            return redirect('visualization')
        
     else:
         form = Index_form()
