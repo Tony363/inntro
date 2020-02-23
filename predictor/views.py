@@ -73,6 +73,22 @@ def home(request):
         return render(request,'predictions.html',{'form':form})
 
 
+def logout(request):
+    return render(request,'registration/logout.html')
+
+def register(request):
+    if request.method == 'POST':
+        form = register_form(request.POST)
+        if form.is_valid():
+            reg_username = form.cleaned_data['reg_username']
+            reg_email = form.cleaned_data['reg_email']
+            reg_password = form.cleaned_data['reg_password']
+            return HttpResponse('thats it for now')
+    else:
+        form = register_form()
+    return render(request,'registration/register.html')
+
+
 
 def visualization(request):
     path = os.path.join(settings.MODELS,'xgbregression.model')

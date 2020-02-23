@@ -135,4 +135,6 @@ DATA_ROOT = os.path.join(SERVER_DIR,'predictor/models')
 
 LOGIN_REDIRECT_URL = 'home/'
 
+LOGOUT_REDIRECT_URL = 'come_again!/'
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

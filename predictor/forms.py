@@ -3,14 +3,20 @@ from .models import *
 from django.contrib.auth.models import User
 
 
-# class register_form(forms.ModelForm):
-#     username = forms.CharField(max_length=100)
-#     email = forms.CharField(max_length=100)
-#     password = forms.CharField(max_length=100)
+class register_form(forms.ModelForm):
+    reg_username = forms.CharField(max_length=100)
+    reg_email = forms.CharField(max_length=100)
+    reg_password = forms.CharField(max_length=100)
 
-#     user = User.objects.create_user(username,email,password)
-#     user.save()
-
+    def save(self,commit=True):
+        user = super(register_form,self).save(commit=False)
+        user.reg_username = self.cleaned_data['reg_username']
+        user.reg_email = self.cleaned_data['reg_email']
+        user.reg_password = self.cleaned_data['reg_password']
+        if commit:
+            user.save()
+        return user
+    
 
 class login_form(forms.ModelForm):
 

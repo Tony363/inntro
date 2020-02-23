@@ -20,12 +20,15 @@ from django.urls import include, path
 from predictor.views import *
 from django.conf import settings
 from django.views.static import serve
+from django.contrib.auth import urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('',include('django.contrib.auth.urls')),
     path('predictor/',include('predictor.urls')),
-    url(r'', home,name='home'),
+    url(r'^home/', home,name='home'),
+    url(r'^come_again!/$',logout,name='logout'),
+    url(r'^register/$',register,name='register'),
 
     path('regression', call_model.as_view()),
 ]
