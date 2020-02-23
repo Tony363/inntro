@@ -21,7 +21,7 @@ class Index_form(forms.ModelForm):
 class download_form(forms.ModelForm):
 
     class Meta():
-        model = Download
+        model = save_data
         fields = ['csv']
     
     def save(self,commit=True):
