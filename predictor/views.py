@@ -78,15 +78,13 @@ def logout(request):
 
 def register(request):
     if request.method == 'POST':
-        form = register_form(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
-            reg_username = form.cleaned_data['reg_username']
-            reg_email = form.cleaned_data['reg_email']
-            reg_password = form.cleaned_data['reg_password']
-            return HttpResponse('thats it for now')
+            form.save()
+            return redirect('/')
     else:
-        form = register_form()
-    return render(request,'registration/register.html')
+        form = RegisterForm()
+    return render(request,'registration/register.html',{'form':form})
 
 
 
