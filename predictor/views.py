@@ -58,8 +58,8 @@ def home(request):
                 request.session['start'] = start_date
                 request.session['end'] = end_date
 
-                requested_stock = yf.Ticker(str(stock))
-                print(requested_stock.info)
+                # requested_stock = yf.Ticker(str(stock))
+                # print(requested_stock.info)
                 
             except Exception:
                return render(request,'predictions.html',{'form':form})
@@ -78,13 +78,15 @@ def logout(request):
 def data(request):
     return render(request,'data.html')
 
+
+
 def calculations(request):
     testleaf = genfromtxt(staticfiles_storage.path('numpy_array/prediction.csv'),delimiter=',')
-    # print(testleaf)
+    
     tree_pandas = []
     tree_numpy = []
     for column in range(max([len(x) for x in testleaf])):
-        # print(column)
+        
         tree = []
         for row in testleaf[:,column]:
             lst = [0] * int(testleaf[:,column].max())
@@ -102,7 +104,7 @@ def calculations(request):
     
     multivariate_normal_distribution = pd.concat(tree_pandas,axis=1)
     multivariate_normal_distribution.to_csv(staticfiles_storage.path('numpy_array/multivariate_normal_distribution.csv'))
-
+    
     return render(request,'calculations.html')
 
 def register(request):
@@ -140,11 +142,11 @@ def visualization(request):
         stock_changes = stock.pct_change()
         stock_changes.drop(stock_changes.index[0],inplace=True)
         stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
-        stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
+        stock_matrix.drop(stock_matrix.index[-99:],inplace=True)staticfiles_storage.path('numpy_array/stock.csv')
         stock_matrix.columns = [ f'Days_{i+1}'for i in range(len(stock_matrix.columns))]
         
         X = stock_matrix.loc[:,'Days_2':]
-        y = stock_matrix['Days_1']
+        y = stock_matrix  stock_changes = stock.pct_change()['Days_1']
 
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.4)
 
@@ -159,7 +161,7 @@ def visualization(request):
         loaded_models = xgb.Booster()
         loaded_models.load_model(path)
         prediction = loaded_models.predict(dtest,pred_leaf=True)
-        print(type(prediction))
+       
         np.savetxt(staticfiles_storage.path('numpy_array/prediction.csv'),prediction,delimiter=',')
 
         explainer = shap.TreeExplainer(loaded_models)
@@ -189,6 +191,21 @@ def visualization(request):
         return render(request,'images.html',{'image':static, 'tony':static})
     else:
         return render(request,'images.html')
+
+def to_PctMatrix(request):
+    if request.method == "POST":
+        df = pd.read_csv(staticfiles_storage.path('numpy_array/stock.csv'))
+
+        stock_changes = stock.pct_change()
+        stock_changes.drop(stock_changes.index[0],inplace=True)
+        stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
+        stock_matrix.drop(stock_matrix.index[-99:],inplace=True)staticfiles_storage.path('numpy_array/stock.csv')
+        stock_matrix.columns = [ f'Days_{i+1}'for i in range(len(stock_matrix.columns))]
+
+        df.to_csv(staticfiles_storage.path('numpy_array/stock.csv'))
+        
+    return render(request,'PctMatrix.html')
+    
 
 def X_train(request):
     csv = staticfiles_storage.path('numpy_array/X_train.csv')

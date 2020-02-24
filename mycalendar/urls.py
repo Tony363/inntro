@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^come_again!/$',logout,name='logout'),
     url(r'^register/$',register,name='register'),
     url(r'^data/$',data,name='data'),
+    
 
     path('regression', call_model.as_view()),
 ]
