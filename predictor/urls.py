@@ -10,4 +10,5 @@ urlpatterns = [
     path('visualization/y_test/',views.y_test,name='y_test'),
     path('visualization/stock/',views.stock,name='stock'),
     path('visualization/prediction/',views.prediction,name='prediction'),
+    path('visualization/calculations/',views.calculations,name='calculations'),
 ]

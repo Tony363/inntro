@@ -15,6 +15,7 @@ from .models import *
 
 from sklearn.model_selection import train_test_split
 from wsgiref.util import FileWrapper
+from numpy import genfromtxt
 
 import yfinance as yf 
 import pandas as pd 
@@ -61,7 +62,7 @@ def home(request):
                 print(requested_stock.info)
                 
             except Exception:
-               return render(request,'predictions.html')
+               return render(request,'predictions.html',{'form':form})
             
             return redirect('visualization')
        
@@ -77,6 +78,33 @@ def logout(request):
 def data(request):
     return render(request,'data.html')
 
+def calculations(request):
+    testleaf = genfromtxt(staticfiles_storage.path('numpy_array/prediction.csv'),delimiter=',')
+    # print(testleaf)
+    tree_pandas = []
+    tree_numpy = []
+    for column in range(max([len(x) for x in testleaf])):
+        # print(column)
+        tree = []
+        for row in testleaf[:,column]:
+            lst = [0] * int(testleaf[:,column].max())
+            try:
+                lst[int(row-1)] = 1
+                tree.append(lst)
+            except IndexError:
+                pass
+        stats = np.asarray(tree)
+        tree_numpy.append(stats)
+        df = pd.DataFrame(tree)
+        df.columns = ['T{}L{}'.format(column+1,i+1) for i in df.columns]
+        df = df.loc[:, (df != 0).any(axis=0)]
+        tree_pandas.append(df)
+    
+    multivariate_normal_distribution = pd.concat(tree_pandas,axis=1)
+    multivariate_normal_distribution.to_csv(staticfiles_storage.path('numpy_array/multivariate_normal_distribution.csv'))
+
+    return render(request,'calculations.html')
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -91,11 +119,10 @@ def register(request):
     return render(request,'registration/register.html',{'form':form})
 
 
-
-
-
 def visualization(request):
     path = os.path.join(settings.MODELS,'xgbregression.model')
+
+    static = os.listdir(os.path.join(settings.STATIC_ROOT,'image/')) 
 
     if request.method == 'GET':
         
@@ -131,7 +158,8 @@ def visualization(request):
 
         loaded_models = xgb.Booster()
         loaded_models.load_model(path)
-        prediction = loaded_models.predict(dtest)
+        prediction = loaded_models.predict(dtest,pred_leaf=True)
+        print(type(prediction))
         np.savetxt(staticfiles_storage.path('numpy_array/prediction.csv'),prediction,delimiter=',')
 
         explainer = shap.TreeExplainer(loaded_models)
@@ -158,7 +186,7 @@ def visualization(request):
      
         # shap.dependence_plot('Days_2',shap_values_XGB_train,X_train).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/scatter.png')
 
-        return render(request,'images.html')
+        return render(request,'images.html',{'image':static, 'tony':static})
     else:
         return render(request,'images.html')
 

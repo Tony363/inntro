@@ -21,10 +21,11 @@ from predictor.views import *
 from django.conf import settings
 from django.views.static import serve
 from django.contrib.auth import urls
-
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('',include('django.contrib.auth.urls')),
+
     path('predictor/',include('predictor.urls')),
     url(r'^home/', home,name='home'),
     url(r'^come_again!/$',logout,name='logout'),
@@ -33,3 +34,5 @@ urlpatterns = [
 
     path('regression', call_model.as_view()),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

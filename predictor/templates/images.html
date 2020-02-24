@@ -32,6 +32,13 @@
                     <h1 class='mt-2'>graph</h1>
                     <hr class='mt-0 mb-4'>
                     {% load static %}
+<!--                     
+                    {% for file in image %}
+                    {{file}}
+                       
+                        <img src="{% static '/image/{{ file }}' %}" />
+                        
+                    {% endfor %} -->
                    
                     <img class='image' src="{% static 'image/initial.png' %}"/>
                     <div class="row">
@@ -52,6 +59,7 @@
                 </div>
             </div>
         </div>
+        <div class='col-6'><a href="{% url 'calculations'%}">take a look at some mathematical representations?</a></div>
         <div class='col-6'><a href="{% url 'data'%}">Download csv?</a></div>
         <div class='col-6'><a href="{% url 'logout'%}">Logout</a></div>
     </body>
