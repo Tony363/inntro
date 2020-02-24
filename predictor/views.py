@@ -42,13 +42,11 @@ dic_r = json.loads(r.content)
 
 
 
-def home(request):
-     
+def home(request):   
     if request.method == 'POST':
         form = Index_form(request.POST)
 
-        if form.is_valid():
-            
+        if form.is_valid():    
             try:
                 stock = form.cleaned_data['stock']
                 start_date = form.cleaned_data['start_date']
@@ -76,15 +74,23 @@ def home(request):
 def logout(request):
     return render(request,'registration/logout.html')
 
+def data(request):
+    return render(request,'data.html')
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
+
         if form.is_valid():
             form.save()
             return redirect('/')
+
     else:
         form = RegisterForm()
+
     return render(request,'registration/register.html',{'form':form})
+
+
 
 
 

@@ -48,39 +48,11 @@
                             <img src="{% static 'image/wave_plot.html' %}"/>
                         </div>
                     </div>
-                    <form action="{% url 'X_train' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name='mybtn1' value={{excel_path}}>Download X_train</button>
-                      
-                    </form>
-                    <form action="{% url 'X_test' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name='mybtn2' value={{excel_path}}>Download X_test</button>
-                       
-                    </form>
-                    <form action="{% url 'y_train' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name='mybtn2' value={{excel_path}}>Download y_train</button>
-                       
-                    </form>
-                    <form action="{% url 'y_test' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name='mybtn2' value={{excel_path}}>Download y_test</button>
-                       
-                    </form>
-                    <form action="{% url 'stock' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name='mybtn2' value={{excel_path}}>Download Stock</button>
-                       
-                    </form>
-                    <form action="{% url 'prediction' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name='mybtn2' value={{excel_path}}>Download prediction</button>
-                       
-                    </form>
+                    
                 </div>
             </div>
         </div>
+        <div class='col-6'><a href="{% url 'data'%}">Download csv?</a></div>
         <div class='col-6'><a href="{% url 'logout'%}">Logout</a></div>
     </body>
 
