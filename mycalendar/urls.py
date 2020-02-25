@@ -25,7 +25,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('',include('django.contrib.auth.urls')),
-
     path('predictor/',include('predictor.urls')),
     url(r'^home/', home,name='home'),
     url(r'^come_again!/$',logout,name='logout'),

@@ -58,18 +58,21 @@ def home(request):
                 request.session['start'] = start_date
                 request.session['end'] = end_date
 
-                # requested_stock = yf.Ticker(str(stock))
-                # print(requested_stock.info)
-                
+                requested_stock = yf.Ticker(str(stock))
+
+                history = requested_stock.history(start=start_date, end=end_date)
+                stock = pd.DataFrame(history)
+                stock.to_csv(staticfiles_storage.path('numpy_array/stock.csv'))
+                        
             except Exception:
-               return render(request,'predictions.html',{'form':form})
-            
-            return redirect('visualization')
+               return render(request,'home.html',{'form':form})
+            # return redirect('visualization')
+            return render(request,'PctMatrix.html')
        
     else:
         form = Index_form()
 
-        return render(request,'predictions.html',{'form':form})
+        return render(request,'home.html',{'form':form})
 
 
 def logout(request):
@@ -142,11 +145,11 @@ def visualization(request):
         stock_changes = stock.pct_change()
         stock_changes.drop(stock_changes.index[0],inplace=True)
         stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
-        stock_matrix.drop(stock_matrix.index[-99:],inplace=True)staticfiles_storage.path('numpy_array/stock.csv')
-        stock_matrix.columns = [ f'Days_{i+1}'for i in range(len(stock_matrix.columns))]
+        stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
+        stock_matrix.columns = [ f'Days_{i}'for i in range(len(stock_matrix.columns))]
         
-        X = stock_matrix.loc[:,'Days_2':]
-        y = stock_matrix  stock_changes = stock.pct_change()['Days_1']
+        X = stock_matrix.loc[:,'Days_1':]
+        y = stock_matrix['Days_0']
 
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.4)
 
@@ -154,9 +157,10 @@ def visualization(request):
         X_test.to_csv(staticfiles_storage.path('numpy_array/X_test.csv'))
         y_train.to_csv(staticfiles_storage.path('numpy_array/y_train.csv'))
         y_test.to_csv(staticfiles_storage.path('numpy_array/y_test.csv'))    
-        
-        dtrain = xgb.DMatrix(X_train,y_train)
-        dtest = xgb.DMatrix(X_test,y_test)
+        print(X_train)
+        print(X_test)
+        dtrain = xgb.DMatrix(X_train,y_train,nthread=-1)
+        dtest = xgb.DMatrix(X_test,y_test,nthread=-1)
 
         loaded_models = xgb.Booster()
         loaded_models.load_model(path)
@@ -174,7 +178,7 @@ def visualization(request):
         shap.initjs()
 
         shap.force_plot(explainer.expected_value,shap_values_XGB_test[0],X_test.iloc[[0]],show=False,matplotlib=True).savefig(staticfiles_storage.path('image/initial.png'))
-        # shap.force_plot(explainer.expected_value,shap_values_XGB_test,X_test).savefig('/home/tony/Desktop/My_repos/inntro/predictor/static/image/initial.png')
+        # shap.force_plot(explainer.expected_value,shap_values_XGB_test,X_test,show=False,matplotlib=False).savefig('/home/tony/Desktop/My_repos/inntro/predictor/static/image/initial.png')
        
         shap.save_html(staticfiles_storage.path('image/wave_plot.png'),shap.force_plot(explainer.expected_value,shap_values_XGB_test,X_test,show=False))
 
@@ -185,29 +189,90 @@ def visualization(request):
         s_plot = plt.figure()
         shap.summary_plot(shap_values_XGB_train,X_train,show=False)
         s_plot.savefig(staticfiles_storage.path('image/shap_value.png'))
-     
-        # shap.dependence_plot('Days_2',shap_values_XGB_train,X_train).savefig('/home/tony/Desktop/github_repos/inntro/predictor/static/image/scatter.png')
+
+        s_plot = plt.figure()
+        shap.dependence_plot('Days_1',shap_values_XGB_train,X_train,show=False)
+        s_plot.savefig(staticfiles_storage.path('image/dependence.pdf'))
 
         return render(request,'images.html',{'image':static, 'tony':static})
     else:
         return render(request,'images.html')
 
-def to_PctMatrix(request):
-    if request.method == "POST":
-        df = pd.read_csv(staticfiles_storage.path('numpy_array/stock.csv'))
 
-        stock_changes = stock.pct_change()
+
+
+def to_PctMatrix(request):
+    csv = staticfiles_storage.path('numpy_array/stock.csv')
+    content_type = mimetypes.guess_type(csv)[0]
+
+    if request.method == "POST":
+        stock = pd.read_csv('{}'.format(csv))
+        
+
+        stock_changes = stock.drop(['Date'],axis=1).pct_change()
+        
         stock_changes.drop(stock_changes.index[0],inplace=True)
         stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
-        stock_matrix.drop(stock_matrix.index[-99:],inplace=True)staticfiles_storage.path('numpy_array/stock.csv')
-        stock_matrix.columns = [ f'Days_{i+1}'for i in range(len(stock_matrix.columns))]
+        stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
+        stock_matrix.columns = [ f'Days_{i}'for i in range(len(stock_matrix.columns))]
 
-        df.to_csv(staticfiles_storage.path('numpy_array/stock.csv'))
+        stock_matrix.to_csv(csv)
+
+        wrapper = FileWrapper(open(csv))
+        response = HttpResponse(wrapper,content_type=content_type)
+        response['Content-Length'] = os.path.getsize(csv)
+        response['Content-Disposition'] = "attachment; filename={}".format('PctMatrix.csv')
+        return response
         
-    return render(request,'PctMatrix.html')
-    
+    return HttpResponse('that\'s the PctMatrix')
 
-def X_train(request):
+def split_data(request):
+    csv = staticfiles_storage.path('numpy_array/stock.csv')
+    content_type = mimetypes.guess_type(csv)[0]
+    if request.method == 'GET':
+        df = pd.read_csv('{}'.format(csv))
+        X = df.loc[:,'Days_1':]
+        y = df['Days_0']
+       
+        X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.4)
+        print(X_test)
+
+        X_train.to_csv(staticfiles_storage.path('numpy_array/X_train.csv'))
+        X_test.to_csv(staticfiles_storage.path('numpy_array/X_test.csv'))
+        y_train.to_csv(staticfiles_storage.path('numpy_array/y_train.csv'))
+        y_test.to_csv(staticfiles_storage.path('numpy_array/y_test.csv'))
+        return render(request,'splitted.html')
+    return HttpResponse('fail')  
+
+def predict(request):
+    path = os.path.join(settings.MODELS,'xgbregression.model')
+    X_train = staticfiles_storage.path('numpy_array/X_train.csv')
+    X_test = staticfiles_storage.path('numpy_array/X_test.csv')
+    y_test = staticfiles_storage.path('numpy_array/y_test.csv')
+    y_train = staticfiles_storage.path('numpy_array/y_train.csv')
+    X_train_content_type = mimetypes.guess_type(X_train)[0]
+    X_test_content_type = mimetypes.guess_type(X_test)[0]
+    y_train_content_type = mimetypes.guess_type(y_train)[0]
+    y_test_content_type = mimetypes.guess_type(y_test)[0]
+
+    if request.method == "POST":
+        X_train = pd.read_csv("{}".format(X_train))
+        X_test = pd.read_csv('{}'.format(X_test))
+        y_train = pd.read_csv("{}".format(y_test))
+        y_test = pd.read_csv("{}".format(y_test))
+        
+        
+        dtrain = xgb.DMatrix(X_train.reset_index().drop(X_train.columns[0],axis=1),y_train.reset_index().drop(y_train.columns[0],axis=1),nthread=-1)
+        dtest = xgb.DMatrix(X_test,y_test,nthread=-1)
+        loaded_models = xgb.Booster()
+        loaded_models.load_model(path)
+        prediction = loaded_models.predict(dtest,pred_leaf=True)
+        np.savetxt(staticfiles_storage.path('numpy_array/prediction.csv'),prediction,delimiter=',')
+        return HttpResponse('predicted')
+    return HttpResponse('predicting')
+
+def X_train(request): 
+    
     csv = staticfiles_storage.path('numpy_array/X_train.csv')
     content_type = mimetypes.guess_type(csv)[0]
 

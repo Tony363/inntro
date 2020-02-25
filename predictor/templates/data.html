@@ -1,3 +1,5 @@
+
+
 <form action="{% url 'X_train' %}" method="post">
     {% csrf_token %}
     <button type="submit" name='mybtn1' value={{excel_path}}>Download X_train</button>
@@ -18,15 +20,13 @@
     <button type="submit" name='mybtn2' value={{excel_path}}>Download y_test</button>
    
 </form>
-<form action="{% url 'stock' %}" method="post">
+
+
+<form action="{% url 'predict' %}" method="post">
     {% csrf_token %}
-    <button type="submit" name='mybtn2' value={{excel_path}}>Download Stock</button>
+    <button type="submit" name='mybtn2' value={{excel_path}}>Predict!</button>
    
 </form>
-<form action="{% url 'prediction' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" name='mybtn2' value={{excel_path}}>Download prediction</button>
-   
-</form>
+
 <div class='col-6'><a href="{% url 'home'%}">pick new stock to analyze?</a></div>
 <div class='col-6'><a href="{% url 'logout'%}">Logout</a></div>
