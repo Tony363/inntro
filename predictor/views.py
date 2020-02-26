@@ -131,7 +131,13 @@ def visualization(request):
         
         loaded_models = xgb.Booster()
         loaded_models.load_model(path)
-        prediction = loaded_models.predict(dtest,pred_leaf=True)
+        s_plot = plt.figure()
+        xgb.plot_importance(loaded_models,max_num_features=10)
+        s_plot.savefig(staticfiles_storage.path('image/importance.png'))
+        s_plot = plt.figure()
+        xgb.plot_tree(loaded_models)
+        s_plot.savefig(staticfiles_storage.path('image/tree.png'))
+        # prediction = loaded_models.predict(dtest,pred_leaf=True)
 
         explainer = shap.TreeExplainer(loaded_models)
         shap_values_XGB_test = explainer.shap_values(X_test)
