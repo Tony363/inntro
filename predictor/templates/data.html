@@ -1,4 +1,8 @@
-
+<form action="{% url 'PctMatrix' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" name='mybtn2' value={{excel_path}}>Download PCT_Matrix</button>
+   
+</form>
 
 <form action="{% url 'X_train' %}" method="post">
     {% csrf_token %}

@@ -59,11 +59,22 @@ def home(request):
                 request.session['end'] = end_date
 
                 requested_stock = yf.Ticker(str(stock))
-                print(requested_stock)
-                history = requested_stock.history(start=start_date, end=end_date)
                 
+                history = requested_stock.history(start=start_date, end=end_date)
                 stock = pd.DataFrame(history)
                 stock.to_csv(staticfiles_storage.path('numpy_array/stock.csv'))
+                
+                
+                stock_changes = history.pct_change()
+                
+                stock_changes.drop(stock_changes.index[0],inplace=True)
+                stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
+                stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
+                stock_matrix.columns = [ f'Days_{i}'for i in range(len(stock_matrix.columns))]
+
+                stock_matrix.to_csv(staticfiles_storage.path('numpy_array/PctMatrix.csv'))
+                
+                
                         
             except Exception:
                return render(request,'home.html',{'form':form})
@@ -82,34 +93,9 @@ def logout(request):
 def data(request):
     return render(request,'data.html')
 
+def to_split_data(request):
+    return render(request,'splitting.html')
 
-
-def calculations(request):
-    testleaf = genfromtxt(staticfiles_storage.path('numpy_array/prediction.csv'),delimiter=',')
-    
-    tree_pandas = []
-    tree_numpy = []
-    for column in range(max([len(x) for x in testleaf])):
-        
-        tree = []
-        for row in testleaf[:,column]:
-            lst = [0] * int(testleaf[:,column].max())
-            try:
-                lst[int(row-1)] = 1
-                tree.append(lst)
-            except IndexError:
-                pass
-        stats = np.asarray(tree)
-        tree_numpy.append(stats)
-        df = pd.DataFrame(tree)
-        df.columns = ['T{}L{}'.format(column+1,i+1) for i in df.columns]
-        df = df.loc[:, (df != 0).any(axis=0)]
-        tree_pandas.append(df)
-    
-    multivariate_normal_distribution = pd.concat(tree_pandas,axis=1)
-    multivariate_normal_distribution.to_csv(staticfiles_storage.path('numpy_array/multivariate_normal_distribution.csv'))
-    
-    return render(request,'calculations.html')
 
 def register(request):
     if request.method == 'POST':
@@ -126,47 +112,26 @@ def register(request):
 
 
 def visualization(request):
-    path = os.path.join(settings.MODELS,'xgbregression.model')
 
     static = os.listdir(os.path.join(settings.STATIC_ROOT,'image/')) 
 
+    path = os.path.join(settings.MODELS,'xgbregression.model')
+    X_train = staticfiles_storage.path('numpy_array/X_train.csv')
+    X_test = staticfiles_storage.path('numpy_array/X_test.csv')
+    y_test = staticfiles_storage.path('numpy_array/y_test.csv')
+    y_train = staticfiles_storage.path('numpy_array/y_train.csv')
+    X_train = pd.read_csv("{}".format(X_train)).set_index(['Date'])
+    X_test = pd.read_csv('{}'.format(X_test)).set_index(['Date'])
+    y_train = pd.read_csv("{}".format(y_test)).set_index(['Date'])
+    y_test = pd.read_csv("{}".format(y_test)).set_index(['Date'])
+    dtrain = xgb.DMatrix(X_train,y_train,nthread=-1)
+    dtest = xgb.DMatrix(X_test,y_test,nthread=-1)
+
     if request.method == 'GET':
         
-        stock_db = Index.objects.all().last()
-        stock = request.session['stock']
-        start = request.session['start']
-        end = request.session['end']
-        
-        requested_stock = yf.Ticker(str(stock))
-
-        history = requested_stock.history(start=str(start), end=str(end))
-        stock = pd.DataFrame(history)
-        stock.to_csv(staticfiles_storage.path('numpy_array/stock.csv'))
-
-        stock_changes = stock.pct_change()
-        stock_changes.drop(stock_changes.index[0],inplace=True)
-        stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
-        stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
-        stock_matrix.columns = [ f'Days_{i}'for i in range(len(stock_matrix.columns))]
-        
-        X = stock_matrix.loc[:,'Days_1':]
-        y = stock_matrix['Days_0']
-
-        X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.4)
-
-        X_train.to_csv(staticfiles_storage.path('numpy_array/X_train.csv'))
-        X_test.to_csv(staticfiles_storage.path('numpy_array/X_test.csv'))
-        y_train.to_csv(staticfiles_storage.path('numpy_array/y_train.csv'))
-        y_test.to_csv(staticfiles_storage.path('numpy_array/y_test.csv'))    
-       
-        dtrain = xgb.DMatrix(X_train,y_train,nthread=-1)
-        dtest = xgb.DMatrix(X_test,y_test,nthread=-1)
-
         loaded_models = xgb.Booster()
         loaded_models.load_model(path)
         prediction = loaded_models.predict(dtest,pred_leaf=True)
-       
-        np.savetxt(staticfiles_storage.path('numpy_array/prediction.csv'),prediction,delimiter=',')
 
         explainer = shap.TreeExplainer(loaded_models)
         shap_values_XGB_test = explainer.shap_values(X_test)
@@ -202,22 +167,10 @@ def visualization(request):
 
 
 def to_PctMatrix(request):
-    csv = staticfiles_storage.path('numpy_array/stock.csv')
+    csv = staticfiles_storage.path('numpy_array/PctMatrix.csv')
     content_type = mimetypes.guess_type(csv)[0]
 
     if request.method == "POST":
-        stock = pd.read_csv('{}'.format(csv))
-        stock.set_index(['Date'],inplace=True)
-        stock.apply(pd.to_numeric)
-        stock_changes = stock.pct_change()
-        
-        stock_changes.drop(stock_changes.index[0],inplace=True)
-        stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
-        stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
-        stock_matrix.columns = [ f'Days_{i}'for i in range(len(stock_matrix.columns))]
-
-        stock_matrix.to_csv(staticfiles_storage.path('numpy_array/PctMatrix.csv'))
-        print(stock_matrix)
         wrapper = FileWrapper(open(csv))
         response = HttpResponse(wrapper,content_type=content_type)
         response['Content-Length'] = os.path.getsize(csv)
@@ -231,12 +184,12 @@ def split_data(request):
     content_type = mimetypes.guess_type(csv)[0]
     if request.method == 'GET':
         df = pd.read_csv('{}'.format(csv)).set_index(['Date'])
-        print(df)
+        
         X = df.loc[:,'Days_1':]
         y = df['Days_0']
        
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.4)
-        print(X_test)
+        
 
         X_train.to_csv(staticfiles_storage.path('numpy_array/X_train.csv'))
         X_test.to_csv(staticfiles_storage.path('numpy_array/X_test.csv'))
@@ -269,8 +222,44 @@ def predict(request):
         loaded_models.load_model(path)
         prediction = loaded_models.predict(dtest,pred_leaf=True)
         np.savetxt(staticfiles_storage.path('numpy_array/prediction.csv'),prediction,delimiter=',')
-        return HttpResponse('predicted')
+        return render(request,'MVND.html')
     return HttpResponse('predicting')
+
+def MVND(request):
+    csv = staticfiles_storage.path('numpy_array/prediction.csv')
+    content_type = mimetypes.guess_type(csv)[0]
+    testleaf = genfromtxt('{}'.format(csv),delimiter=',')
+    
+    tree_pandas = []
+    tree_numpy = []
+    for column in range(max([len(x) for x in testleaf])):
+        
+        tree = []
+        for row in testleaf[:,column]:
+            lst = [0] * int(testleaf[:,column].max())
+            try:
+                lst[int(row-1)] = 1
+                tree.append(lst)
+            except IndexError:
+                pass
+        stats = np.asarray(tree)
+        tree_numpy.append(stats)
+        df = pd.DataFrame(tree)
+        df.columns = ['T{}L{}'.format(column+1,i+1) for i in df.columns]
+        df = df.loc[:, (df != 0).any(axis=0)]
+        tree_pandas.append(df)
+    
+    multivariate_normal_distribution = pd.concat(tree_pandas,axis=1)
+    multivariate_normal_distribution.to_csv(staticfiles_storage.path('numpy_array/multivariate_normal_distribution.csv'))
+    print(multivariate_normal_distribution)
+    wrapper = FileWrapper(open(staticfiles_storage.path('numpy_array/multivariate_normal_distribution.csv')))
+    response = HttpResponse(wrapper,content_type=content_type)
+    response['Content-Length'] = os.path.getsize(staticfiles_storage.path('numpy_array/multivariate_normal_distribution.csv'))
+    response['Content-Disposition'] = "attachment; filename={}".format('MVND.csv')
+    
+    return response
+
+
 
 def X_train(request): 
     

@@ -1,8 +1,6 @@
-<form action="{% url 'PctMatrix' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" name='mybtn2' value={{excel_path}}>Download PCT_Matrix</button>
-   
-</form>
 
+<!-- <div class='col-6'><a method='post' href="{% url 'to_split_data'%}" >time to split data</a></div> -->
 <div class='col-6'><a method='post' href="{% url 'split_data'%}" >time to split data</a></div>
+
+<div class='col-6'><a href="{% url 'logout'%}">Logout</a></div>
 
