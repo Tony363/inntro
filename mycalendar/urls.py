@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^home/', home,name='home'),
     url(r'^come_again!/$',logout,name='logout'),
     url(r'^register/$',register,name='register'),
+    url(r'^split_data/$',split_data,name='split_data'),
     url(r'^data/$',data,name='data'),
     
 

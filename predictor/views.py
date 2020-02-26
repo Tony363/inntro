@@ -59,8 +59,9 @@ def home(request):
                 request.session['end'] = end_date
 
                 requested_stock = yf.Ticker(str(stock))
-
+                print(requested_stock)
                 history = requested_stock.history(start=start_date, end=end_date)
+                
                 stock = pd.DataFrame(history)
                 stock.to_csv(staticfiles_storage.path('numpy_array/stock.csv'))
                         
@@ -157,8 +158,7 @@ def visualization(request):
         X_test.to_csv(staticfiles_storage.path('numpy_array/X_test.csv'))
         y_train.to_csv(staticfiles_storage.path('numpy_array/y_train.csv'))
         y_test.to_csv(staticfiles_storage.path('numpy_array/y_test.csv'))    
-        print(X_train)
-        print(X_test)
+       
         dtrain = xgb.DMatrix(X_train,y_train,nthread=-1)
         dtest = xgb.DMatrix(X_test,y_test,nthread=-1)
 
@@ -207,17 +207,17 @@ def to_PctMatrix(request):
 
     if request.method == "POST":
         stock = pd.read_csv('{}'.format(csv))
-        
-
-        stock_changes = stock.drop(['Date'],axis=1).pct_change()
+        stock.set_index(['Date'],inplace=True)
+        stock.apply(pd.to_numeric)
+        stock_changes = stock.pct_change()
         
         stock_changes.drop(stock_changes.index[0],inplace=True)
         stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
         stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
         stock_matrix.columns = [ f'Days_{i}'for i in range(len(stock_matrix.columns))]
 
-        stock_matrix.to_csv(csv)
-
+        stock_matrix.to_csv(staticfiles_storage.path('numpy_array/PctMatrix.csv'))
+        print(stock_matrix)
         wrapper = FileWrapper(open(csv))
         response = HttpResponse(wrapper,content_type=content_type)
         response['Content-Length'] = os.path.getsize(csv)
@@ -227,10 +227,11 @@ def to_PctMatrix(request):
     return HttpResponse('that\'s the PctMatrix')
 
 def split_data(request):
-    csv = staticfiles_storage.path('numpy_array/stock.csv')
+    csv = staticfiles_storage.path('numpy_array/PctMatrix.csv')
     content_type = mimetypes.guess_type(csv)[0]
     if request.method == 'GET':
-        df = pd.read_csv('{}'.format(csv))
+        df = pd.read_csv('{}'.format(csv)).set_index(['Date'])
+        print(df)
         X = df.loc[:,'Days_1':]
         y = df['Days_0']
        
@@ -256,13 +257,13 @@ def predict(request):
     y_test_content_type = mimetypes.guess_type(y_test)[0]
 
     if request.method == "POST":
-        X_train = pd.read_csv("{}".format(X_train))
-        X_test = pd.read_csv('{}'.format(X_test))
-        y_train = pd.read_csv("{}".format(y_test))
-        y_test = pd.read_csv("{}".format(y_test))
+        X_train = pd.read_csv("{}".format(X_train)).set_index(['Date'])
+        X_test = pd.read_csv('{}'.format(X_test)).set_index(['Date'])
+        y_train = pd.read_csv("{}".format(y_test)).set_index(['Date'])
+        y_test = pd.read_csv("{}".format(y_test)).set_index(['Date'])
         
         
-        dtrain = xgb.DMatrix(X_train.reset_index().drop(X_train.columns[0],axis=1),y_train.reset_index().drop(y_train.columns[0],axis=1),nthread=-1)
+        dtrain = xgb.DMatrix(X_train,y_train,nthread=-1)
         dtest = xgb.DMatrix(X_test,y_test,nthread=-1)
         loaded_models = xgb.Booster()
         loaded_models.load_model(path)
