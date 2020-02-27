@@ -1,9 +1,24 @@
 {% extends 'base_generic.html' %}
+
+{% block title %}
+PCT Matrix
+{% endblock %}
+
 {% block content %}
 <!-- <div class='col-6'><a method='post' href="{% url 'to_split_data'%}" >time to split data</a></div> -->
-<div class='col-6'><a method='post' href="{% url 'split_data'%}" >time to split data</a></div>
-
-<div class='col-6'><a href="{% url 'logout'%}">Logout</a></div>
+<div class="row">
+    
+    <div class="col-12 bg-white" style="margin:20px;height:400px;color:black">
+        <p style="font-size: 18px;">With the API call in to Yahoo Finance data, I first store the prescribed history of stock data into a csv. Now in order to predict percent changes for the coming days, I parsed the history data into percent change rolling matrix over periods of 100 days to use as training and validation datasets.</p>
+    </div>
+    <div class='col-12 text-center'>
+        <a method='post' href="{% url 'split_data'%}" >
+            <button class="bg-white btn" style="color:black">
+              time to split data
+            </button>
+        </a>
+    </div>    
+</div>
 
 {% endblock %}
 

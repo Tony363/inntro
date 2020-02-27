@@ -12,6 +12,7 @@ urlpatterns = [
     path('visualization/y_train/',views.y_train,name='y_train'),
     path('visualization/y_test/',views.y_test,name='y_test'),
     path('visualization/stock/',views.stock,name='stock'),
+    path('visualization/Prediction',views.prediction,name='prediction'),
     path('visualization/predict/',views.predict,name='predict'),
     path('visualization/Pct_Matrix',views.to_PctMatrix,name="PctMatrix"),
     path('visualization/MVND/',views.MVND,name='MVND'),

@@ -1,19 +1,13 @@
-## Django Calendar
+Hi there!
 
-__Installing and running__
+I am Tony Siu from Hong Kong SAR. Im currently on the run between Hong Kong and Taipei, trying to apply for university in Taiwan. 
 
-```bash
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
-```
+Ive started the cs50 course since last year march and have been on and off the course for quite a bit. Im trying to build a Web app for my client that I am coaching on extreme gradient boosted models so that he can have a better interface during my sessions with him. He is an Statistician with a PHD working in Amazon, a director of his own team, he briefs me on the statistical theory that he wants executed and I code up his script for him. But So far during our sessions I have to spend alot of time explaining code, adapting code, and guiding him through some devops before we can move on to our stock market regression model. It might be a bit frustrating for him. So Im gonna build a web app where he can enter the stock name to get historical stock values he wants from yahoo finance off of pythons yfinance API, and be immediately given a full explanation via visualizations to the inner workings of our model.  I even added features where he can download the Excel spreadsheets of different calculations he would like to indulge himself in on his own being the mathematician that he is. I figured I didn't need a fancy complicated application and just find the necessary tools for him to interface with. 
 
-Head over to [http:localhost:8000/admin](http:localhost:8000/admin) and sign in with your admin credential (defined above). 
+I am using the Django framework to quickly develop a web application, loading my xgboost generated model through incoming yfinance API data with all the logic done with in the back end of Django.  Keeping my data in the static files of django in CSV format might be more appropriate for my use case since I had only considered for me and my client to use our app. With multiple users, and the huge amount of data Im generating with my application, I deemed it inappropriate to use Django inbuilt abstration to sqlite3. I had the option of either deploying my web app into an AWS cloud server or Google Cloud platform to counter computation run time of my app, or when multiple possible users use my web app to generate the Spread sheets they want. But for deployablility sake, I chose to partition  my back end functions so that my spread sheets and graphs don't need to be generated all at once. I also had the option for me to deploy my xgboost model as an API itself using fastAPI or even build my jupyter notebook as the back end of my web application to be deployed into a python full stack tool called Anvil.works. Im not too familiar with those 2 tools as Ive only been programming for approximately 8 months.
 
+There are still many features or devops considerations I need to take into consideration, like UI/UX, different API that I can use like xlwings specifically for excel spreadsheets, or considerations for  malicious users looking to destroy my prematurely deployed web app.  
 
-21/11/2019;
-fixed up the html models and integrated all most modals in the Learning_git branch
+This was what i was able to garner up over my 8 months programming experience so far and this was CS50!
 
-6/12/2019;
-fixed up some POST data forms
+-Tony

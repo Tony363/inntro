@@ -14,6 +14,7 @@ from .forms import *
 from .models import *
 
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
 from wsgiref.util import FileWrapper
 from numpy import genfromtxt
 
@@ -131,13 +132,18 @@ def visualization(request):
         
         loaded_models = xgb.Booster()
         loaded_models.load_model(path)
-        s_plot = plt.figure()
+        
+        
         xgb.plot_importance(loaded_models,max_num_features=10)
-        s_plot.savefig(staticfiles_storage.path('image/importance.png'))
-        s_plot = plt.figure()
+        fig = plt.gcf()
+        
+        fig.savefig(staticfiles_storage.path('image/importance.png'))
+    
         xgb.plot_tree(loaded_models)
-        s_plot.savefig(staticfiles_storage.path('image/tree.png'))
-        # prediction = loaded_models.predict(dtest,pred_leaf=True)
+        fig = plt.gcf()
+      
+        fig.savefig(staticfiles_storage.path('image/tree.png'))
+  
 
         explainer = shap.TreeExplainer(loaded_models)
         shap_values_XGB_test = explainer.shap_values(X_test)
@@ -161,9 +167,10 @@ def visualization(request):
         shap.summary_plot(shap_values_XGB_train,X_train,show=False)
         s_plot.savefig(staticfiles_storage.path('image/shap_value.png'))
 
-        s_plot = plt.figure()
+        
         shap.dependence_plot('Days_1',shap_values_XGB_train,X_train,show=False)
-        s_plot.savefig(staticfiles_storage.path('image/dependence.pdf'))
+        fig = plt.gcf()
+        fig.savefig(staticfiles_storage.path('image/dependance.png'))
 
         return render(request,'images.html',{'image':static, 'tony':static})
     else:
@@ -194,7 +201,7 @@ def split_data(request):
         X = df.loc[:,'Days_1':]
         y = df['Days_0']
        
-        X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.4)
+        X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2, random_state=1)
         
 
         X_train.to_csv(staticfiles_storage.path('numpy_array/X_train.csv'))
@@ -224,11 +231,22 @@ def predict(request):
         
         dtrain = xgb.DMatrix(X_train,y_train,nthread=-1)
         dtest = xgb.DMatrix(X_test,y_test,nthread=-1)
+
         loaded_models = xgb.Booster()
         loaded_models.load_model(path)
+
+        # print(loaded_models.eval(dtest,name='eval'))
+        # print(loaded_models.eval_set([(dtest,"Test")]))
+        # print(loaded_models.eval(dtrain,name='eval'))
+        # print(loaded_models.eval_set([(dtrain,'Train')]))
+
         prediction = loaded_models.predict(dtest,pred_leaf=True)
+        # print(prediction)
+
+        # accuracy = mean_squared_error(prediction,y_test)
+
         np.savetxt(staticfiles_storage.path('numpy_array/prediction.csv'),prediction,delimiter=',')
-        return render(request,'MVND.html')
+        return render(request,'MVND.html')#{'accuracy':accuracy})
     return HttpResponse('predicting')
 
 def MVND(request):
@@ -257,7 +275,7 @@ def MVND(request):
     
     multivariate_normal_distribution = pd.concat(tree_pandas,axis=1)
     multivariate_normal_distribution.to_csv(staticfiles_storage.path('numpy_array/multivariate_normal_distribution.csv'))
-    print(multivariate_normal_distribution)
+    # print(multivariate_normal_distribution)
     wrapper = FileWrapper(open(staticfiles_storage.path('numpy_array/multivariate_normal_distribution.csv')))
     response = HttpResponse(wrapper,content_type=content_type)
     response['Content-Length'] = os.path.getsize(staticfiles_storage.path('numpy_array/multivariate_normal_distribution.csv'))

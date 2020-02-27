@@ -1,6 +1,28 @@
+{% extends 'base_generic.html'%}
+{% block title %}
+Logout
+{% endblock %}
+
 
 
 {% block content %}
-  <p>Logged out!</p>  
-  <a href="{% url 'login'%}">Click here to login again.</a>
+  
+<div class="containder">
+  <div class="row">
+    
+    <div class="col-12 bg-white" style="margin:20px;height:400px;color:black">
+        <p style="font-size: 18px;"></p>
+    </div>
+    <div class='col-12 text-center'>
+        <a method='post' href="{% url 'login'%}" >
+            <button class="bg-white btn" style="color:black">
+              Click here to login again
+            </button>
+            
+        </a>
+        <p style="font-size: 18px;color: white;">Logged out!</p>
+    </div>    
+</div>
+</div>
+  
 {% endblock %}

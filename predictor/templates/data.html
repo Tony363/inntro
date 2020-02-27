@@ -1,38 +1,64 @@
 {% extends 'base_generic.html' %}
+{% block title %}
+CSV to Download
+{% endblock %}
+
 {% block content %}
-<form action="{% url 'PctMatrix' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" name='mybtn2' value={{excel_path}}>Download PCT_Matrix</button>
+<div class="row">
+    <style>
+        button{
+            margin:10px;
+            width:100%;
+            color:black !important;
+        }
+    </style>
    
-</form>
-
-<form action="{% url 'X_train' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" name='mybtn1' value={{excel_path}}>Download X_train</button>
+    <div class="col-6 offset-3" style="margin-top:50px;">
+        <form action="{% url 'PctMatrix' %}" method="post">
+            {% csrf_token %}
+            <button class="btn bg-white" type="submit" name='mybtn2' value={{excel_path}}>Download PCT_Matrix</button>
+           
+        </form>
+        
+        <form action="{% url 'X_train' %}" method="post">
+            {% csrf_token %}
+            <button class="btn bg-white" type="submit" name='mybtn1' value={{excel_path}}>Download X_train</button>
+          
+        </form>
+        <form action="{% url 'X_test' %}" method="post">
+            {% csrf_token %}
+            <button class="btn bg-white" type="submit" name='mybtn2' value={{excel_path}}>Download X_test</button>
+           
+        </form>
+        <form action="{% url 'y_train' %}" method="post">
+            {% csrf_token %}
+            <button class="btn bg-white" type="submit" name='mybtn2' value={{excel_path}}>Download y_train</button>
+           
+        </form>
+        <form action="{% url 'y_test' %}" method="post">
+            {% csrf_token %}
+            <button class="btn bg-white" type="submit" name='mybtn2' value={{excel_path}}>Download y_test</button>
+           
+        </form>
   
-</form>
-<form action="{% url 'X_test' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" name='mybtn2' value={{excel_path}}>Download X_test</button>
-   
-</form>
-<form action="{% url 'y_train' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" name='mybtn2' value={{excel_path}}>Download y_train</button>
-   
-</form>
-<form action="{% url 'y_test' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" name='mybtn2' value={{excel_path}}>Download y_test</button>
-   
-</form>
+        <form action="{% url 'predict' %}" method="post">
+            {% csrf_token %}
+            <button class="btn bg-white" type="submit" name='mybtn2' value={{excel_path}}>Predict!</button>
+           
+        </form>
 
+        <div class="col-12 text-right">
+            <a href="{% url 'home'%}">pick new stock to analyze?</a>
+    
+        </div>
+        
+        {% endblock%}
+    </div>
+    <div>
+        hi tony
+    </div>
+</div>
 
-<form action="{% url 'predict' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" name='mybtn2' value={{excel_path}}>Predict!</button>
-   
-</form>
-
-<div class='col-6'><a href="{% url 'home'%}">pick new stock to analyze?</a></div>
-{% endblock%}
+<script>
+    alert("tony")
+</script>
