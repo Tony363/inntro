@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
+import django_heroku
+
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -120,6 +122,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
@@ -144,3 +148,9 @@ LOGOUT_REDIRECT_URL = 'come_again!/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+DATABASE_URL = 'postgres://dlzlqlnyvltigc:16fa3940ee2a757a3cfa7f6afc701013a23e95afc2743e0eef72d404fa14df9e@ec2-35-172-85-250.compute-1.amazonaws.com:5432/d9o9s4dr1uhent'
+
+# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+# django_heroku.settings(locals())
