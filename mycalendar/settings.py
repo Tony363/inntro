@@ -126,26 +126,26 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR), "image"
-)
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR), "image"
+# )
 STATIC_ROOT = 'predictor/static'
 
 MODELS = os.path.join(BASE_DIR,'predictor/models')
 
-SERVER_DIR = '/home/tony/Desktop/github_repos/Dataquest-modules/My_Notebooks/media/'
+# SERVER_DIR = '/home/tony/Desktop/github_repos/Dataquest-modules/My_Notebooks/media/'
 
-MEDIA_ROOT = os.path.join(SERVER_DIR,'media')
-MEDIA_URL = os.path.join(SERVER_DIR,'media/')
+# MEDIA_ROOT = os.path.join(SERVER_DIR,'media')
+# MEDIA_URL = os.path.join(SERVER_DIR,'media/')
 
-OUTPUT_DIR = os.path.join(SERVER_DIR,'predictor/models/')
-DATA_ROOT = os.path.join(SERVER_DIR,'predictor/models')
+# OUTPUT_DIR = os.path.join(SERVER_DIR,'predictor/models/')
+# DATA_ROOT = os.path.join(SERVER_DIR,'predictor/models')
 
 LOGIN_REDIRECT_URL = 'home/'
 
 LOGOUT_REDIRECT_URL = 'come_again!/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
