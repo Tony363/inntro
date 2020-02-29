@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'predictor',
     'crispy_forms',
-    'ndarray'
+    'ndarray',
+    'xgboostinterface'
 ]
 
 MIDDLEWARE = [
@@ -155,4 +156,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
