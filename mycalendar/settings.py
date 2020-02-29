@@ -27,7 +27,7 @@ SECRET_KEY = '##thsb-+a=n+z7ijlfne&*qpjz(^%nts_)9pk1=-r8*eq-rizp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -59,7 +59,7 @@ ROOT_URLCONF = 'mycalendar.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [],#[os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,6 +130,8 @@ STATIC_URL = '/static/'
 #     os.path.join(BASE_DIR), "image"
 # )
 STATIC_ROOT = 'predictor/static'
+
+
 
 MODELS = os.path.join(BASE_DIR,'predictor/models')
 
