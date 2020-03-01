@@ -1,1 +1,1 @@
-web: gunicorn xgboostinterface.wsgi
+web: gunicorn xgboostinterface.wsgi --log-file
