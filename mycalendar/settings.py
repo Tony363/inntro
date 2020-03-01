@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'predictor',
     'crispy_forms',
     'ndarray',
-    'xgboostinterface'
+    
 ]
 
 MIDDLEWARE = [
