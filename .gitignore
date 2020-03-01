@@ -1,7 +1,8 @@
 *.pyc
 .vscode
 venv
-predictor/static/numpy_array/*.csv
-predictor/static/image/*.png
+//predictor/static/image/*.png
+//predictor/static/numpy_array/*.csv
+
 predictor/static/image/dependence.pdf
 MVND.html
