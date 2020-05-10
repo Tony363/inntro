@@ -83,8 +83,8 @@ def home(request):
 
                 stock_matrix.to_sql('PCT_Change',con=engine,if_exists='replace',index=True,index_label='ID')
                 # stock_matrix.to_csv(staticfiles_storage.path('numpy_array/PctMatrix.csv'))               
-            except Exception:
-                print('wtf')
+            except Exception as e:
+                print(e)
                 return render(request,'home.html',{'form':form})
        
             return render(request,'PctMatrix.html')
@@ -137,7 +137,6 @@ def visualization(request):
         loaded_models = xgb.Booster()
         loaded_models.load_model(path)
         
-        
         xgb.plot_importance(loaded_models,max_num_features=10)
         fig = plt.gcf()
         
@@ -148,7 +147,6 @@ def visualization(request):
       
         fig.savefig(staticfiles_storage.path('image/tree.png'))
   
-
         explainer = shap.TreeExplainer(loaded_models)
         shap_values_XGB_test = explainer.shap_values(X_test)
         shap_values_XGB_train = explainer.shap_values(X_train)

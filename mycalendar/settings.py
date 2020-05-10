@@ -135,8 +135,6 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = 'predictor/static'
 
-
-
 MODELS = os.path.join(BASE_DIR,'predictor/models')
 
 LOGIN_REDIRECT_URL = 'home/'
@@ -146,5 +144,5 @@ LOGOUT_REDIRECT_URL = 'come_again!/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
-# django_heroku.settings(locals())
+django_heroku.settings(locals())
 
