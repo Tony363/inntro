@@ -1,0 +1,52 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}
+MVND Matrix
+{% endblock %}
+
+{% block content %}
+<!-- <form action="{% url 'MVND' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" name='mybtn2' value={{excel_path}}>Download Multivariate Normal Distribution Matrix</button>
+   
+</form>
+
+<div class='col-6'><a method='post' href="{% url 'visualization'%}" >let's look at some shap explainers</a></div>
+ -->
+
+
+<div class="row">
+    <style>
+        button{
+            margin: 10px;
+            width:100%;
+            color:black !important;
+        }
+    </style>
+    <div class="col-12 bg-white" style="margin:20px;height:400px;color:black">
+        <p style="font-size: 18px;">The SHAP Python library has the following explainers available: deep (a fast, but approximate, algorithm to compute SHAP values for deep learning models based on the DeepLIFT algorithm); gradient (combines ideas from Integrated Gradients, SHAP and SmoothGrad into a single expected value equation for deep learning models); kernel (a specially weighted local linear regression to estimate SHAP values for any model); linear (compute the exact SHAP values for a linear model with independent features); tree (a fast and exact algorithm to compute SHAP values for trees and ensembles of trees) and sampling (computes SHAP values under the assumption of feature independence — a good alternative to kernel when you want to use a large background set). The first three of our models can use the tree explainer.</p>
+    </div>
+    <div class='col-12 text-center'>
+        <a method='post' href="{% url 'visualization'%}" >
+            <button class="bg-white btn" style="color:black">
+               Let's look at some shap explainers
+            </button>
+        </a>
+        <form action="{% url 'prediction' %}" method="post" style='margin: 20px;'>
+            {% csrf_token %}
+            <button class="btn bg-white" type="submit" name='mybtn2' value={{excel_path}} style='color: black; '>Download Predictions</button>
+           
+        </form>
+        <form action="{% url 'MVND' %}" method="post" style='margin: 20px;'>
+            {% csrf_token %}
+            <button class="btn bg-white" type="submit" name='mybtn2' value={{excel_path}} style='color: black; '>Download Multivariate Normal Distribution Matrix</button>
+           
+        </form>
+        <div class='col-12 text-center'><a href="{% url 'data'%}">Download csv?</a></div>
+        <!-- <div class="col-12 text-left" style='font-size: 18px;'> Model accuracy is </div> -->
+        <div class="col-6 text-left" style='font-size: 18px;'> Test-rmse:0.033480</div>
+        <div class='col-6 text-left' style='font-size: 18px;'>Train-rmse:0.010598</div>
+    </div>    
+</div>
+
+{% endblock %}

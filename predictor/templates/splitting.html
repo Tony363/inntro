@@ -1,0 +1,12 @@
+
+{% extends 'base_generic.html' %}
+
+{% block title %}
+Shuffling!
+{% endblock %}
+
+{% block content %}
+<div class='col-6'><a method='post' href="{% url 'split_data'%}" >time to split data</a></div>
+
+<div class='col-6'><a href="{% url 'logout'%}">Logout</a></div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}
+Shuffled
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="row">
+    
+    <div class="col-12 bg-white" style="margin:20px;height:400px;color:black">
+        <p style='font-size: 18px;'>Using sklearn model selection package, I splitted the data into feature training, validating data, and Label training, validating data sets. These newly created datasets can be Downloaded for observation
+        
+        </p>
+    </div>
+    <div class='col-12 text-center'>
+        <a method='post' href="{% url 'data'%}" >
+            <button class="bg-white btn" style="color:black">
+              Shuffled your data, download them?
+            </button>
+        </a>
+    </div>    
+</div>
+
+{% endblock %}
