@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import django_heroku
 import dj_database_url
 import os
-from .secrets import *
+# from .secrets import *
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
