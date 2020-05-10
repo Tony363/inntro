@@ -33,8 +33,6 @@ urlpatterns = [
     url(r'^register/$',register,name='register'),
     url(r'^split_data/$',split_data,name='split_data'),
     url(r'^data/$',data,name='data'),
-    
-
     path('regression', call_model.as_view()),
 ]
 
