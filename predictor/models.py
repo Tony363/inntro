@@ -16,11 +16,11 @@ user = settings.DATABASES['default']['USER']
 password = settings.DATABASES['default']['PASSWORD']
 database_name = settings.DATABASES['default']['NAME']
  
-database_url = 'postgresql://{user}:{password}@localhost:5432/{database_name}'.format(
-    user=user,
-    password=password,
-    database_name=database_name,
-)
+# database_url = 'postgresql://{user}:{password}@localhost:5432/{database_name}'.format(
+#     user=user,
+#     password=password,
+#     database_name=database_name,
+# )
 
 heroku_db = 'postgres://hfqxspbjkknhoh:4b5c72fe18d750fa3b2a96c904c3ecd8608577086a75620e650ce14f3b25690f@ec2-54-81-37-115.compute-1.amazonaws.com:5432/ddrv4lrinua85j'
 
