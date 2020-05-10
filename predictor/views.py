@@ -127,7 +127,6 @@ def visualization(request):
     y_train = read_frame(Ytrain.objects.all()).drop(columns='ID')
     y_test = read_frame(Ytest.objects.all()).drop(columns='ID')
 
-    print(X_test)
     
     
     dtrain = xgb.DMatrix(X_train,y_train,nthread=-1)
