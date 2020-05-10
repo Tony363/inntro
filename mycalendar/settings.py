@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'mycalendar.wsgi.application'
 
 DATABASES = {
     'default':dj_database_url.config(
-        default=config('DATABASE_URL')
+        default=os.environ['DATABASE_URL']
     )
 }
 
