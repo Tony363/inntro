@@ -24,7 +24,7 @@ database_url = 'postgresql://{user}:{password}@localhost:5432/{database_name}'.f
 
 heroku_db = 'postgres://hfqxspbjkknhoh:4b5c72fe18d750fa3b2a96c904c3ecd8608577086a75620e650ce14f3b25690f@ec2-54-81-37-115.compute-1.amazonaws.com:5432/ddrv4lrinua85j'
 
-engine = create_engine(database_url, echo=False)
+engine = create_engine(heroku_db, echo=False)
 
 # Create your models here.
 
