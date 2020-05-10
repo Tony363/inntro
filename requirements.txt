@@ -58,3 +58,4 @@ whitenoise==5.0.1
 wrapt==1.11.2
 xgboost==1.0.0
 yfinance==0.1.54
+django-pandas==0.6.1
