@@ -52,40 +52,38 @@ def home(request):
         form = Index_form(request.POST)
 
         if form.is_valid():    
-            try:
-                stock = form.cleaned_data['stock']
-                start_date = form.cleaned_data['start_date']
-                end_date = form.cleaned_data['end_date']
-                form.save()
-                
-                request.session['stock'] = stock
-                request.session['start'] = start_date
-                request.session['end'] = end_date
-
-                requested_stock = yf.Ticker(str(stock))              
-                history = requested_stock.history(start=start_date, end=end_date)
+            # try:
+            stock = form.cleaned_data['stock']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            form.save()
             
-                history.reset_index(inplace=True)
-                history.index.name = 'ID'
-                history.columns = ['Date','Open','High','Low','Close','Volume','Dividends','Stock_splits']
+            request.session['stock'] = stock
+            request.session['start'] = start_date
+            request.session['end'] = end_date
 
-                history.to_sql('DFModel',con=engine,if_exists='replace',index=True,index_label='ID')
-                
-                # history.to_csv(staticfiles_storage.path('numpy_array/stock.csv'))
-                
-                stock_changes = history.set_index('Date').pct_change()
-                stock_changes.drop(stock_changes.index[0],inplace=True)
-                stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
-                stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
-                stock_matrix.columns = [ f'Days_{i}'for i in range(len(stock_matrix.columns))]
-                stock_matrix.reset_index(inplace=True)
-                stock_matrix.index.name = 'ID'
+            requested_stock = yf.Ticker(str(stock))              
+            history = requested_stock.history(start=start_date, end=end_date)
+        
+            history.reset_index(inplace=True)
+            history.index.name = 'ID'
+            history.columns = ['Date','Open','High','Low','Close','Volume','Dividends','Stock_splits']
 
-                stock_matrix.to_sql('PCT_Change',con=engine,if_exists='replace',index=True,index_label='ID')
-                # stock_matrix.to_csv(staticfiles_storage.path('numpy_array/PctMatrix.csv'))               
-            except Exception as e:
-                print(e)
-                return render(request,'home.html',{'form':form})
+            history.to_sql('DFModel',con=engine,if_exists='replace',index=True,index_label='ID')
+            
+            stock_changes = history.set_index('Date').pct_change()
+            stock_changes.drop(stock_changes.index[0],inplace=True)
+            stock_matrix = pd.concat([stock_changes.Close.shift(-i) for i in range(100)],axis=1)
+            stock_matrix.drop(stock_matrix.index[-99:],inplace=True)
+            stock_matrix.columns = [ f'Days_{i}'for i in range(len(stock_matrix.columns))]
+            stock_matrix.reset_index(inplace=True)
+            stock_matrix.index.name = 'ID'
+
+            stock_matrix.to_sql('PCT_Change',con=engine,if_exists='replace',index=True,index_label='ID')
+                
+            # except Exception as e:
+            #     print(e)
+            #     return render(request,'home.html',{'form':form})
        
             return render(request,'PctMatrix.html')
        
