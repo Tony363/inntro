@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import django_heroku
 import dj_database_url
 import os
-# from .secrets import *
+from .secrets import *
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
@@ -83,6 +83,7 @@ WSGI_APPLICATION = 'mycalendar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# DATABASES = DATABASES
 DATABASES = {
     'default':dj_database_url.config(
         default=os.environ['DATABASE_URL']
