@@ -223,14 +223,6 @@ def split_data(request):
 def predict(request):
 
     path = os.path.join(settings.MODELS,'xgbregression.model')  
-    # X_train = staticfiles_storage.path('numpy_array/X_train.csv')
-    # X_test = staticfiles_storage.path('numpy_array/X_test.csv')
-    # y_test = staticfiles_storage.path('numpy_array/y_test.csv')
-    # y_train = staticfiles_storage.path('numpy_array/y_train.csv')
-    # X_train_content_type = mimetypes.guess_type(X_train)[0]
-    # X_test_content_type = mimetypes.guess_type(X_test)[0]
-    # y_train_content_type = mimetypes.guess_type(y_train)[0]
-    # y_test_content_type = mimetypes.guess_type(y_test)[0]
 
     if request.method == "POST":
         X_train = read_frame(Xtrain.objects.all())
@@ -385,8 +377,10 @@ def stock(request):
 def prediction(request):
     csv = staticfiles_storage.path('numpy_array/prediction.csv')
     content_type = mimetypes.guess_type(csv)[0]
+    pred = read_frame(Pred.objects.all()).drop(columns='ID')
 
     if request.method == 'POST':
+        pred.to_csv(csv)
         wrapper = FileWrapper(open(csv))
         response = HttpResponse(wrapper,content_type=content_type)
         response['Content-Length'] = os.path.getsize(csv)
